@@ -5,7 +5,13 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MatButtonModule } from '@angular/material/button';
 import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardHeader,
+  MatCardTitle,
+} from '@angular/material/card';
 
 @Component({
   selector: 'app-login',
@@ -26,12 +32,12 @@ import { MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardTitle } 
     MatCardContent,
   ],
   templateUrl: './login.page.html',
-  styleUrl: './login.page.scss'
+  styleUrl: './login.page.scss',
 })
 export class LoginPage {
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', Validators.required)
+    password: new FormControl('', Validators.required),
   });
 
   get isFormValid(): boolean {
