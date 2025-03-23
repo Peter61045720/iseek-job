@@ -1,1 +1,29 @@
-<p>login works!</p>
+<div class="login-container">
+  <mat-card>
+      <mat-card-header>
+          <mat-card-title>Login</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()" >
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email">
+            <mat-error *ngIf="!loginForm.get('email')?.valid && loginForm.get('email')?.touched">Please enter a valid email address.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password">
+            <mat-error *ngIf="!loginForm.get('password')?.valid && loginForm.get('password')?.touched">Please enter your password.</mat-error>
+          </mat-form-field>
+
+          <button mat-flat-button type="submit" routerLink="/home" [disabled]="!isFormValid">Login</button>
+        </form>
+      </mat-card-content>
+
+      <mat-card-actions>
+          <button mat-button routerLink="/registration">New here? Create an account</button>
+      </mat-card-actions>
+  </mat-card>
+</div>
