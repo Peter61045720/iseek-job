@@ -1,0 +1,41 @@
+.registration-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  width: 30vh;
+}
+
+.registration-form button {
+  margin: 5px;
+}
+
+.form-error {
+  display: flex;
+  justify-content: center;
+  font-size: 14px;
+}
+
+mat-form-field {
+  margin: 5px;
+}
+
+mat-card {
+  background-color: aliceblue;
+}
+
+mat-card-header {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+
+mat-card-actions {
+  margin: 0px 5px;
+  padding: 16px 16px 8px 16px;
+}

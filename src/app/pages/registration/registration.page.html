@@ -1,1 +1,59 @@
-<p>registration works!</p>
+<div class="registration-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Registration</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form class="registration-form" [formGroup]="registrationForm" (ngSubmit)="register()">
+        <mat-form-field appearance="outline">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username" />
+          <mat-error *ngIf="!registrationForm.get('username')?.valid && registrationForm.get('username')?.touched">
+            Please enter a valid username.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" />
+          <mat-error *ngIf="!registrationForm.get('email')?.valid && registrationForm.get('email')?.touched">
+            Please enter a valid email address.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" />
+          <mat-error *ngIf="registrationForm.get('password')?.hasError('required') && registrationForm.get('password')?.touched">
+            Please enter your password.
+          </mat-error>
+          <mat-error *ngIf="registrationForm.get('password')?.hasError('minlength') && registrationForm.get('password')?.touched">
+            Password must be at least 8 characters.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput type="password" formControlName="confirmPassword" />
+          <mat-error *ngIf="registrationForm.get('confirmPassword')?.hasError('required') && registrationForm.get('confirmPassword')?.touched">
+            Please enter your password again.
+          </mat-error>
+          <mat-error *ngIf="registrationForm.get('confirmPassword')?.hasError('minlength') && registrationForm.get('confirmPassword')?.touched">
+            Password must be at least 8 characters.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-error class="form-error" *ngIf="registrationForm.hasError('passwordMismatch') && registrationForm.get('confirmPassword')?.touched">
+          Passwords do not match.
+        </mat-error>
+
+        <button mat-flat-button type="submit" routerLink="/home" [disabled]="!isFormValid">Register</button>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-button routerLink="/login">Back to login</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
