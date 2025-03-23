@@ -1,1 +1,4 @@
-<button mat-flat-button routerLink="/login">Logout</button>
+<button mat-flat-button (click)="logout()">Logout</button>
+<div class="spinner" *ngIf="isLoading">
+  <mat-spinner diameter="100"></mat-spinner>
+</div>

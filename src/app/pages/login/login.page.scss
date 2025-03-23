@@ -15,6 +15,20 @@
   margin: 5px;
 }
 
+.spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+}
+
 mat-form-field {
   margin: 5px;
 }

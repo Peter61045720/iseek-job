@@ -48,7 +48,7 @@
           Passwords do not match.
         </mat-error>
 
-        <button mat-flat-button type="submit" routerLink="/home" [disabled]="!isFormValid">Register</button>
+        <button mat-flat-button type="submit" [disabled]="!isFormValid">Register</button>
       </form>
     </mat-card-content>
 
@@ -56,4 +56,7 @@
       <button mat-button routerLink="/login">Back to login</button>
     </mat-card-actions>
   </mat-card>
+</div>
+<div class="spinner" *ngIf="isLoading">
+  <mat-spinner diameter="100"></mat-spinner>
 </div>

@@ -18,7 +18,7 @@
           <mat-error *ngIf="!loginForm.get('password')?.valid && loginForm.get('password')?.touched">Please enter your password.</mat-error>
         </mat-form-field>
 
-        <button mat-flat-button type="submit" routerLink="/home" [disabled]="!isFormValid">Login</button>
+        <button mat-flat-button type="submit" [disabled]="!isFormValid">Login</button>
       </form>
     </mat-card-content>
 
@@ -26,4 +26,7 @@
       <button mat-button routerLink="/registration">New here? Create an account</button>
     </mat-card-actions>
   </mat-card>
+</div>
+<div class="spinner" *ngIf="isLoading">
+  <mat-spinner diameter="100"></mat-spinner>
 </div>
