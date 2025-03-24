@@ -15,6 +15,8 @@ import {
 } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { passwordMatchValidator } from '../../shared/validators/password-match.validator';
+import { UserService } from '../../shared/services/user.service';
+import { User } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-registration',
@@ -53,7 +55,8 @@ export class RegistrationPage {
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private userService: UserService
   ) {}
 
   get isFormValid(): boolean {
@@ -61,10 +64,6 @@ export class RegistrationPage {
   }
 
   register(): void {
-    // console.log(this.registrationForm.get('username')?.value);
-    // console.log(this.registrationForm.get('email')?.value);
-    // console.log(this.registrationForm.get('password')?.value);
-
     this.isLoading = true;
 
     this.authService
@@ -73,7 +72,12 @@ export class RegistrationPage {
         this.registrationForm.get('password')!.value!
       )
       .then(userCred => {
-        console.log(userCred);
+        const user: User = {
+          id: userCred.user.uid,
+          username: this.registrationForm.get('username')!.value!,
+          email: this.registrationForm.get('email')!.value!,
+        };
+        this.userService.createUser(user);
         this.router.navigateByUrl('/home');
       })
       .catch(error => {
