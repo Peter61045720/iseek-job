@@ -14,6 +14,8 @@ import {
   MatCardTitle,
 } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { HotToastService } from '@ngxpert/hot-toast';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -38,8 +40,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   styleUrl: './login.page.scss',
 })
 export class LoginPage {
-  isLoading = false;
-
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
@@ -47,7 +47,8 @@ export class LoginPage {
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private toast: HotToastService
   ) {}
 
   get isFormValid(): boolean {
@@ -58,19 +59,22 @@ export class LoginPage {
     // console.log(this.loginForm.get('email')?.value);
     // console.log(this.loginForm.get('password')?.value);
 
-    this.isLoading = true;
-
-    this.authService
-      .login(this.loginForm.get('email')!.value!, this.loginForm.get('password')!.value!)
-      .then(userCred => {
-        console.log(userCred);
-        this.router.navigateByUrl('/home');
-      })
-      .catch(error => {
-        console.log(error);
-      })
-      .finally(() => {
-        this.isLoading = false;
-      });
+    firstValueFrom(
+      this.authService
+        .login(this.loginForm.get('email')!.value!, this.loginForm.get('password')!.value!)
+        .pipe(
+          this.toast.observe({
+            loading: 'Bejelentkezés...',
+            success: d => {
+              this.router.navigateByUrl('/home');
+              return 'Sikeres bejelentkezés!';
+            },
+            error: e => {
+              console.error(e);
+              return 'Sikertelen bejelentkezés!';
+            },
+          })
+        )
+    );
   }
 }

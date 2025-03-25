@@ -17,6 +17,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { passwordMatchValidator } from '../../shared/validators/password-match.validator';
 import { UserService } from '../../shared/services/user.service';
 import { User } from '../../shared/models/user.model';
+import { firstValueFrom } from 'rxjs';
+import { HotToastService } from '@ngxpert/hot-toast';
+import { FirebaseError } from '@angular/fire/app';
 
 @Component({
   selector: 'app-registration',
@@ -41,8 +44,6 @@ import { User } from '../../shared/models/user.model';
   styleUrl: './registration.page.scss',
 })
 export class RegistrationPage {
-  isLoading = false;
-
   registrationForm = new FormGroup(
     {
       username: new FormControl('', Validators.required),
@@ -56,7 +57,8 @@ export class RegistrationPage {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private toast: HotToastService
   ) {}
 
   get isFormValid(): boolean {
@@ -64,13 +66,26 @@ export class RegistrationPage {
   }
 
   register(): void {
-    this.isLoading = true;
-
-    this.authService
-      .register(
-        this.registrationForm.get('email')!.value!,
-        this.registrationForm.get('password')!.value!
-      )
+    firstValueFrom(
+      this.authService
+        .register(
+          this.registrationForm.get('email')!.value!,
+          this.registrationForm.get('password')!.value!
+        )
+        .pipe(
+          this.toast.observe({
+            loading: 'Regisztráció...',
+            success: d => {
+              //this.router.navigateByUrl('/home');
+              return 'Sikeres regisztráció!';
+            },
+            error: e => {
+              const a = e as FirebaseError;
+              return 'Sikertelen regisztráció: ' + a.message;
+            },
+          })
+        )
+    )
       .then(userCred => {
         const user: User = {
           id: userCred.user.uid,
@@ -82,9 +97,6 @@ export class RegistrationPage {
       })
       .catch(error => {
         console.log(error);
-      })
-      .finally(() => {
-        this.isLoading = false;
       });
   }
 }

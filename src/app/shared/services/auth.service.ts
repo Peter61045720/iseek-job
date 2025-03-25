@@ -7,7 +7,7 @@ import {
   signOut,
   UserCredential,
 } from '@angular/fire/auth';
-import { map, Observable } from 'rxjs';
+import { map, Observable, from } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -19,12 +19,12 @@ export class AuthService {
     return authState(this.auth).pipe(map(user => !!user));
   }
 
-  register(email: string, password: string): Promise<UserCredential> {
-    return createUserWithEmailAndPassword(this.auth, email, password);
+  register(email: string, password: string): Observable<UserCredential> {
+    return from(createUserWithEmailAndPassword(this.auth, email, password));
   }
 
-  login(email: string, password: string): Promise<UserCredential> {
-    return signInWithEmailAndPassword(this.auth, email, password);
+  login(email: string, password: string): Observable<UserCredential> {
+    return from(signInWithEmailAndPassword(this.auth, email, password));
   }
 
   logout(): Promise<void> {
