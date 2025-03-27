@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { FirestoreBaseService } from './firestore-base.service';
 import { DocumentData } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -29,5 +30,23 @@ export class UserService {
 
   deleteUser(id: string): Promise<void> {
     return this.baseService.delete(this.collectionName, id);
+  }
+
+  getUserData(userId: string): Observable<User | null> {
+    return new Observable(observer => {
+      this.baseService
+        .getById('Users', userId)
+        .then(userData => {
+          if (userData) {
+            observer.next(userData as User);
+          } else {
+            observer.next(null);
+          }
+          observer.complete();
+        })
+        .catch(error => {
+          observer.error(error);
+        });
+    });
   }
 }
