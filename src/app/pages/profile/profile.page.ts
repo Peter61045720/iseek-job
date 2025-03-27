@@ -75,7 +75,6 @@ export class ProfilePage implements OnInit {
   }
 
   goBack() {
-    const previousUrl = history.state.from || '/';
-    this.router.navigateByUrl(previousUrl);
+    this.router.navigateByUrl('/home');
   }
 }
