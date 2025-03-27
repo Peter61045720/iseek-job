@@ -75,7 +75,7 @@ export class RegistrationPage {
         .pipe(
           this.toast.observe({
             loading: 'Regisztráció...',
-            success: d => {
+            success: () => {
               //this.router.navigateByUrl('/home');
               return 'Sikeres regisztráció!';
             },
