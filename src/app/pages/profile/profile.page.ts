@@ -34,6 +34,7 @@ export class ProfilePage implements OnInit {
 
     this.user$ = this.userService.getUserData(userId);
     console.log(userId);
+    this.userId = userId;
   }
 
   goBack() {

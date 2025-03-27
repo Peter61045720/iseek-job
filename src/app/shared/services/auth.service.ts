@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   getCurrentUserId(): string | undefined {
-    const user = this.auth.currentUser; // This returns a promise that resolves to the current user
+    const user = this.auth.currentUser;
     if (user !== null) {
       return user.uid;
     } else {
