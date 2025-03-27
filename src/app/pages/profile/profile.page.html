@@ -1,24 +1,31 @@
 <div class="profile-div">
   <div class="details">
-    <table>
-      <th>User details</th>
-      <tr>
-        <td>details</td>
-        <td>will not</td>
-        <td>appear</td>
-      </tr>
-      <tr>
-        <td>in this</td>
-        <td>form</td>
-        <td>this</td>
-      </tr>
-      <tr>
-        <td>is just</td>
-        <td>a test</td>
-        <td>.</td>
-      </tr>
-    </table>
-    <p>Details</p>
+    <mat-card *ngIf="user$ | async as user">
+      <mat-card-header>
+        <mat-card-title>Your Profile:</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>
+          <strong>Username: </strong>
+          <span *ngIf="editingField !== 'username'">{{ user.username }}</span>
+          <input *ngIf="editingField === 'username'" [(ngModel)]="editedValue" (blur)="saveChanges('username')" />
+          <mat-icon mat-icon-button class="edit-button-icon" (click)="startEditing('username', user.username)"> edit </mat-icon>
+        </p>
+        <p>
+          <strong>Full Name: </strong>
+          <span *ngIf="editingField !== 'name'">{{ user.name }}</span>
+          <input *ngIf="editingField === 'name'" [(ngModel)]="editedValue" (blur)="saveChanges('name')" />
+          <mat-icon mat-icon-button class="edit-button-icon" (click)="startEditing('name', user.name)"> edit </mat-icon>
+        </p>
+        <p><strong> Email: </strong>{{user.email}}</p>
+        <p>
+          <strong>Residence: </strong>
+          <span *ngIf="editingField !== 'residence'">{{ user.residence }}</span>
+          <input *ngIf="editingField === 'residence'" [(ngModel)]="editedValue" (blur)="saveChanges('residence')" />
+          <mat-icon mat-icon-button class="edit-button-icon" (click)="startEditing('residence', user.residence)"> edit </mat-icon>
+        </p>
+      </mat-card-content>
+    </mat-card>
   </div>
   <div class="go-back-button-div">
     <button mat-flat-button class="go-back-button" (click)="goBack()">⬅ Back</button>

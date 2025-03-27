@@ -30,4 +30,13 @@ export class AuthService {
   logout(): Promise<void> {
     return signOut(this.auth);
   }
+
+  getCurrentUserId(): string | undefined {
+    const user = this.auth.currentUser;
+    if (user !== null) {
+      return user.uid;
+    } else {
+      return undefined;
+    }
+  }
 }
