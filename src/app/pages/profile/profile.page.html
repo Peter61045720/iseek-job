@@ -1,12 +1,16 @@
 <div class="profile-div">
   <div class="details">
-    <mat-card>
+    <mat-card *ngIf="user$ | async as user">
       <mat-card-header>
-        <mat-card-title>Profile Details</mat-card-title>
+        <mat-card-title>Your Profile:</mat-card-title>
       </mat-card-header>
-      <mat-card-content> <p>{{userId?.toString()}}</p> </mat-card-content>
+      <mat-card-content>
+        <p>Username: {{user.username}}</p>
+        <p>Full Name: {{user.name}}</p>
+        <p>Email: {{user.email}}</p>
+        <p>Residence: {{user.residence}}</p>
+      </mat-card-content>
     </mat-card>
-    <p>Details</p>
   </div>
   <div class="go-back-button-div">
     <button mat-flat-button class="go-back-button" (click)="goBack()">⬅ Back</button>

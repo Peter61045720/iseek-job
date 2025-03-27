@@ -6,11 +6,12 @@ import { UserService } from '../../shared/services/user.service';
 import { Observable, of } from 'rxjs';
 import { User } from '../../shared/models/user.model';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [MatButtonModule, MatCard, MatCardHeader, MatCardTitle, MatCardContent],
+  imports: [CommonModule, MatButtonModule, MatCard, MatCardHeader, MatCardTitle, MatCardContent],
   templateUrl: './profile.page.html',
   styleUrl: './profile.page.scss',
 })
