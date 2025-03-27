@@ -1,4 +1,32 @@
 {
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=827846
-  "recommendations": ["angular.ng-template"]
+  "recommendations": [
+    "angular.ng-template",
+    "1tontech.angular-material",
+    "aaron-bond.better-comments",
+    "alexiv.vscode-angular2-files",
+    "christian-kohler.path-intellisense",
+    "codezombiech.gitignore",
+    "cyrilletuzi.angular-schematics",
+    "dbaeumer.vscode-eslint",
+    "editorconfig.editorconfig",
+    "esbenp.prettier-vscode",
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-rename-tag",
+    "gruntfuggly.todo-tree",
+    "infinity1207.angular2-switcher",
+    "john-crowson.angular-file-changer",
+    "johnpapa.angular2",
+    "mhutchie.git-graph",
+    "obenjiro.arrr",
+    "quicktype.quicktype",
+    "rimuruchan.vscode-fix-checksums-next",
+    "segerdekort.angular-cli",
+    "steoates.autoimport",
+    "streetsidesoftware.code-spell-checker",
+    "stringham.move-ts",
+    "usernamehw.errorlens",
+    "waderyan.gitblame",
+    "ziyasal.vscode-open-in-github"
+  ]
 }
