@@ -46,10 +46,12 @@ import { FirebaseError } from '@angular/fire/app';
 export class RegistrationPage {
   registrationForm = new FormGroup(
     {
+      name: new FormControl('', Validators.required),
       username: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.minLength(8)]),
       confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      residence: new FormControl('', Validators.required),
     },
     passwordMatchValidator('password', 'confirmPassword')
   );
@@ -89,8 +91,10 @@ export class RegistrationPage {
       .then(userCred => {
         const user: User = {
           id: userCred.user.uid,
+          name: this.registrationForm.get('name')!.value!,
           username: this.registrationForm.get('username')!.value!,
           email: this.registrationForm.get('email')!.value!,
+          residence: this.registrationForm.get('residence')!.value!,
         };
         this.userService.createUser(user);
         this.router.navigateByUrl('/home');

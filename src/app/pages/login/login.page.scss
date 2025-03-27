@@ -29,6 +29,12 @@
   z-index: 1000;
 }
 
+.registration-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 mat-form-field {
   margin: 5px;
 }
