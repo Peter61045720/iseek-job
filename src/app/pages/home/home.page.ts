@@ -29,4 +29,8 @@ export class HomePage {
       this.isLoading = false;
     });
   }
+
+  goToProfile(): void {
+    this.router.navigate(['/profile'], { state: { from: this.router.url } });
+  }
 }
