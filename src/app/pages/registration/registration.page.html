@@ -9,14 +9,20 @@
         <mat-form-field appearance="outline">
           <mat-label>Full Name</mat-label>
           <input matInput formControlName="name" />
+          <!-- Error for required field -->
           <mat-error *ngIf="registrationForm.get('name')?.hasError('required') && registrationForm.get('name')?.touched">
             Please enter your full name.
+          </mat-error>
+          <!-- Error for invalid characters -->
+          <mat-error *ngIf="registrationForm.get('name')?.hasError('pattern') && registrationForm.get('name')?.touched">
+            Your name is not appropriate.
           </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Username</mat-label>
           <input matInput formControlName="username" />
+          <!-- Error for required field -->
           <mat-error *ngIf="!registrationForm.get('username')?.valid && registrationForm.get('username')?.touched">
             Please enter a valid username.
           </mat-error>
@@ -25,6 +31,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
           <input matInput type="email" formControlName="email" />
+          <!-- Error for required field -->
           <mat-error *ngIf="!registrationForm.get('email')?.valid && registrationForm.get('email')?.touched">
             Please enter a valid email address.
           </mat-error>
@@ -33,9 +40,11 @@
         <mat-form-field appearance="outline">
           <mat-label>Password</mat-label>
           <input matInput type="password" formControlName="password" />
+          <!-- Error for required field -->
           <mat-error *ngIf="registrationForm.get('password')?.hasError('required') && registrationForm.get('password')?.touched">
             Please enter your password.
           </mat-error>
+          <!-- Error for inappropriate password -->
           <mat-error *ngIf="registrationForm.get('password')?.hasError('minlength') && registrationForm.get('password')?.touched">
             Password must be at least 8 characters.
           </mat-error>
@@ -44,9 +53,11 @@
         <mat-form-field appearance="outline">
           <mat-label>Confirm Password</mat-label>
           <input matInput type="password" formControlName="confirmPassword" />
+          <!-- Error for required field -->
           <mat-error *ngIf="registrationForm.get('confirmPassword')?.hasError('required') && registrationForm.get('confirmPassword')?.touched">
             Please enter your password again.
           </mat-error>
+          <!-- Error for inappropriate password -->
           <mat-error *ngIf="registrationForm.get('confirmPassword')?.hasError('minlength') && registrationForm.get('confirmPassword')?.touched">
             Password must be at least 8 characters.
           </mat-error>
@@ -55,8 +66,13 @@
         <mat-form-field appearance="outline">
           <mat-label>Residence</mat-label>
           <input matInput formControlName="residence" />
+          <!-- Error for required field -->
           <mat-error *ngIf="registrationForm.get('residence')?.hasError('required') && registrationForm.get('residence')?.touched">
             Please state your permanent residence.
+          </mat-error>
+          <!-- Error for invalid characters -->
+          <mat-error *ngIf="registrationForm.get('residence')?.hasError('pattern') && registrationForm.get('residence')?.touched">
+            Residence name is not appropriate.
           </mat-error>
         </mat-form-field>
 
