@@ -8,20 +8,20 @@
         <p>
           <strong>Username: </strong>
           <span *ngIf="editingField !== 'username'">{{ user.username }}</span>
-          <input *ngIf="editingField === 'username'" [(ngModel)]="editedValue" (blur)="saveChanges('username')" />
+          <input *ngIf="editingField === 'username'" [(ngModel)]="editedValue" (input)="filterUserNameInput()" (blur)="saveChanges('username')" />
           <mat-icon mat-icon-button class="edit-button-icon" (click)="startEditing('username', user.username)"> edit </mat-icon>
         </p>
         <p>
           <strong>Full Name: </strong>
           <span *ngIf="editingField !== 'name'">{{ user.name }}</span>
-          <input *ngIf="editingField === 'name'" [(ngModel)]="editedValue" (blur)="saveChanges('name')" />
+          <input *ngIf="editingField === 'name'" [(ngModel)]="editedValue" (input)="filterNRInput()" (blur)="saveChanges('name')" />
           <mat-icon mat-icon-button class="edit-button-icon" (click)="startEditing('name', user.name)"> edit </mat-icon>
         </p>
         <p><strong> Email: </strong>{{user.email}}</p>
         <p>
           <strong>Residence: </strong>
           <span *ngIf="editingField !== 'residence'">{{ user.residence }}</span>
-          <input *ngIf="editingField === 'residence'" [(ngModel)]="editedValue" (blur)="saveChanges('residence')" />
+          <input *ngIf="editingField === 'residence'" [(ngModel)]="editedValue" (input)="filterNRInput()" (blur)="saveChanges('residence')" />
           <mat-icon mat-icon-button class="edit-button-icon" (click)="startEditing('residence', user.residence)"> edit </mat-icon>
         </p>
       </mat-card-content>

@@ -74,6 +74,21 @@ export class ProfilePage implements OnInit {
     }
   }
 
+  // Used for regex filtering name and residence
+  filterNRInput() {
+    this.editedValue = this.editedValue
+      .replace(/[^A-Za-zÀ-ÖØ-öø-ÿ' -]/g, '')
+      .replace(/(['._-]){2,}/g, '$1');
+  }
+
+  // Used for regex filtering username
+  filterUserNameInput() {
+    this.editedValue = this.editedValue
+      .replace(/[^A-Za-zÀ-ÖØ-öø-ÿ0-9._-]/g, '')
+      .replace(/(['._-]){2,}/g, '$1')
+      .replace(/^['._-]|['._-]$/g, '');
+  }
+
   goBack() {
     this.router.navigateByUrl('/home');
   }
