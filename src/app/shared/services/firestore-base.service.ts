@@ -6,8 +6,12 @@ import {
   DocumentData,
   Firestore,
   getDoc,
+  getDocs,
+  query,
   setDoc,
   updateDoc,
+  where,
+  WhereFilterOp,
 } from '@angular/fire/firestore';
 
 @Injectable({
@@ -28,14 +32,33 @@ export class FirestoreBaseService<T extends { id: string }> {
     return setDoc(docRef, data);
   }
 
-  async getById(collectionName: string, id: string): Promise<DocumentData | null> {
+  async getById(collectionName: string, id: string): Promise<T | null> {
     const docRef = doc(this.firestore, `${collectionName}/${id}`);
     const snapshot = await getDoc(docRef);
     if (snapshot.exists()) {
-      return snapshot.data();
+      return snapshot.data() as T;
     } else {
       return null;
     }
+  }
+
+  async getAll(collectionName: string): Promise<T[]> {
+    return (await getDocs(collection(this.firestore, collectionName))).docs.map(doc => ({
+      ...doc.data(),
+    })) as T[];
+  }
+
+  async getByField(
+    collectionName: string,
+    fieldPath: string,
+    opStr: WhereFilterOp,
+    value: unknown
+  ): Promise<T[]> {
+    return (
+      await getDocs(
+        query(collection(this.firestore, collectionName), where(fieldPath, opStr, value))
+      )
+    ).docs.map(doc => ({ ...doc.data() })) as T[];
   }
 
   update(collectionName: string, id: string, data: Partial<T>): Promise<void> {

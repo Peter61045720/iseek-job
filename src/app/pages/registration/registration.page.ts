@@ -76,7 +76,7 @@ export class RegistrationPage {
   register(): void {
     firstValueFrom(
       this.authService
-        .register(
+        .register$(
           this.registrationForm.get('email')!.value!,
           this.registrationForm.get('password')!.value!
         )

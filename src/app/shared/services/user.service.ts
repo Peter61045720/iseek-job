@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { FirestoreBaseService } from './firestore-base.service';
-import { DocumentData } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { WhereFilterOp } from '@angular/fire/firestore';
+import { from, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -20,9 +20,27 @@ export class UserService {
     return this.baseService.create(this.collectionName, user);
   }
 
-  getUserById(id: string): Promise<DocumentData | null> {
+  getUserById(id: string): Promise<User | null> {
     return this.baseService.getById(this.collectionName, id);
   }
+
+  getUserById$(id: string): Observable<User | null> {
+    return from(this.getUserById(id));
+  }
+
+  getAllUsers(): Promise<User[]> {
+    return this.baseService.getAll(this.collectionName);
+  }
+
+  // TODO
+  // getAllUsers$(): Observable<User[]> {}
+
+  getUsersByField(fieldPath: string, opStr: WhereFilterOp, value: unknown): Promise<User[]> {
+    return this.baseService.getByField(this.collectionName, fieldPath, opStr, value);
+  }
+
+  // TODO
+  // getUsersByField$(): Observable<User[]> {}
 
   updateUser(id: string, user: Partial<User>): Promise<void> {
     return this.baseService.update(this.collectionName, id, user);
@@ -30,23 +48,5 @@ export class UserService {
 
   deleteUser(id: string): Promise<void> {
     return this.baseService.delete(this.collectionName, id);
-  }
-
-  getUserData(userId: string): Observable<User | null> {
-    return new Observable(observer => {
-      this.baseService
-        .getById('Users', userId)
-        .then(userData => {
-          if (userData) {
-            observer.next(userData as User);
-          } else {
-            observer.next(null);
-          }
-          observer.complete();
-        })
-        .catch(error => {
-          observer.error(error);
-        });
-    });
   }
 }

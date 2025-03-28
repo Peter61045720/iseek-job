@@ -56,12 +56,9 @@ export class LoginPage {
   }
 
   login() {
-    // console.log(this.loginForm.get('email')?.value);
-    // console.log(this.loginForm.get('password')?.value);
-
     firstValueFrom(
       this.authService
-        .login(this.loginForm.get('email')!.value!, this.loginForm.get('password')!.value!)
+        .login$(this.loginForm.get('email')!.value!, this.loginForm.get('password')!.value!)
         .pipe(
           this.toast.observe({
             loading: 'Bejelentkezés...',

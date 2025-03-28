@@ -39,14 +39,14 @@ export class ProfilePage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const userId = this.authService.getCurrentUserId();
+    const userId = this.authService.getUserUid();
 
     if (!userId) {
       this.router.navigate(['/login']);
       return;
     }
 
-    this.user$ = this.userService.getUserData(userId);
+    this.user$ = this.userService.getUserById$(userId);
     console.log(userId);
     this.userId = userId;
   }
@@ -64,7 +64,7 @@ export class ProfilePage implements OnInit {
 
       try {
         await this.userService.updateUser(this.userId, updatedData);
-        this.user$ = this.userService.getUserData(this.userId);
+        this.user$ = this.userService.getUserById$(this.userId);
         this.editingField = null;
       } catch (error) {
         console.error('Error updating Firestore:', error);
