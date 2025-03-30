@@ -1,11 +1,7 @@
-import { AuthService } from './../../shared/services/auth.service';
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
 import {
   MatCard,
   MatCardActions,
@@ -13,17 +9,18 @@ import {
   MatCardHeader,
   MatCardTitle,
 } from '@angular/material/card';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { passwordMatchValidator } from '../../shared/validators/password-match.validator';
-import { UserService } from '../../shared/services/user.service';
-import { User } from '../../shared/models/user.model';
-import { firstValueFrom } from 'rxjs';
+import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { Router, RouterLink } from '@angular/router';
+import { passwordMatchValidator } from '../../../shared/validators/password-match.validator';
+import { AuthService } from '../../../shared/services/auth.service';
 import { HotToastService } from '@ngxpert/hot-toast';
+import { firstValueFrom } from 'rxjs';
 import { FirebaseError } from '@angular/fire/app';
-import { UserRole } from '../../shared/enums/user-role.enum';
+import { Contact } from '../../../shared/models/contact.model';
 
 @Component({
-  selector: 'app-registration',
+  selector: 'app-company-registration',
   standalone: true,
   imports: [
     CommonModule,
@@ -39,48 +36,42 @@ import { UserRole } from '../../shared/enums/user-role.enum';
     MatCardActions,
     MatCardTitle,
     MatCardContent,
-    MatProgressSpinnerModule,
   ],
-  templateUrl: './registration.page.html',
-  styleUrl: './registration.page.scss',
+  templateUrl: './company-registration.page.html',
+  styleUrl: './company-registration.page.scss',
 })
-export class RegistrationPage {
-  registrationForm = new FormGroup(
+export class CompanyRegistrationPage {
+  contactForm = new FormGroup(
     {
       name: new FormControl('', [
         Validators.required,
         Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '-][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/),
       ]),
-      username: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
+      phone: new FormControl('', [Validators.required, Validators.pattern(/^\d+$/)]),
       password: new FormControl('', [Validators.required, Validators.minLength(8)]),
       confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
-      residence: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '-][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/),
-      ]),
     },
     passwordMatchValidator('password', 'confirmPassword')
   );
 
+  // TODO Finish company registration form
+  // companyForm = new FormGroup();
+
   constructor(
     private router: Router,
     private authService: AuthService,
-    private userService: UserService,
     private toast: HotToastService
   ) {}
 
   get isFormValid(): boolean {
-    return this.registrationForm.valid;
+    return this.contactForm.valid;
   }
 
   register(): void {
     firstValueFrom(
       this.authService
-        .register$(
-          this.registrationForm.get('email')!.value!,
-          this.registrationForm.get('password')!.value!
-        )
+        .register$(this.contactForm.get('email')!.value!, this.contactForm.get('password')!.value!)
         .pipe(
           this.toast.observe({
             loading: 'Registering...',
@@ -95,15 +86,8 @@ export class RegistrationPage {
         )
     )
       .then(userCred => {
-        const user: User = {
-          id: userCred.user.uid,
-          name: this.registrationForm.get('name')!.value!,
-          username: this.registrationForm.get('username')!.value!,
-          email: this.registrationForm.get('email')!.value!,
-          residence: this.registrationForm.get('residence')!.value!,
-          role: UserRole.User,
-        };
-        this.userService.createUser(user);
+        // const contact: Contact = {};
+        console.log(userCred);
         this.router.navigateByUrl('/home');
       })
       .catch(error => {

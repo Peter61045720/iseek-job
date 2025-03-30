@@ -6,7 +6,7 @@ export const routes: Routes = [
     path: '',
     loadComponent: () =>
       import('./shared/components/guest-layout/guest-layout.component').then(
-        p => p.GuestLayoutComponent
+        l => l.GuestLayoutComponent
       ),
     children: [
       {
@@ -19,6 +19,13 @@ export const routes: Routes = [
           import('./pages/registration/registration.page').then(p => p.RegistrationPage),
       },
       {
+        path: 'company-registration',
+        loadComponent: () =>
+          import('./pages/company/registration/company-registration.page').then(
+            p => p.CompanyRegistrationPage
+          ),
+      },
+      {
         path: '',
         redirectTo: 'login',
         pathMatch: 'full',
@@ -29,7 +36,7 @@ export const routes: Routes = [
     path: '',
     loadComponent: () =>
       import('./shared/components/main-layout/main-layout.component').then(
-        p => p.MainLayoutComponent
+        l => l.MainLayoutComponent
       ),
     canActivateChild: [authGuard],
     children: [
