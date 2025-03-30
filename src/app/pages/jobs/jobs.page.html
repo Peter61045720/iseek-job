@@ -1,0 +1,62 @@
+<div class="search-container">
+  <mat-form-field>
+    <mat-label>Search</mat-label>
+    <input matInput placeholder="Search" [(ngModel)]="search" (keyup)="handleSearch($event)" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Publication date</mat-label>
+    <mat-select [(value)]="currJobSearchDate" (valueChange)="handleDateChange($event)">
+      @for (key of jobKeys; track $index ) {
+      <mat-option value="{{key}}">{{jobDesc[key]}}</mat-option>
+
+      }
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Required qualifications</mat-label>
+    <mat-select [(value)]="currEducation" (valueChange)="handleEducationChange($event)">
+      @for (key of educationKeys; track $index ) {
+      <mat-option value="{{key}}">{{educationDesc[key]}}</mat-option>
+
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div class="card-list">
+  @for (job of jobs; track $index) {
+  <mat-card class="job-card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title-group>
+        <mat-card-title class="job-title"><a href="/job/{{job.id}}">{{job.position}}</a></mat-card-title>
+        <mat-card-subtitle class="job-subtitle"
+          ><mat-icon>location_city</mat-icon><a href="/company/{{job.company?.id}}">{{job.company?.name}}</a></mat-card-subtitle
+        >
+        <mat-card-subtitle class="job-subtitle"><mat-icon>location_on</mat-icon> {{job.company?.location}}</mat-card-subtitle>
+        <img mat-card-sm-image matCardImage src="{{job.company?.logo}}" alt="logo" />
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content class="job-content"> {{job.description.substring(0,150) + (job.description.length>150?"...":"")}} </mat-card-content>
+    <mat-card-actions class="job-actions">
+      <button class="job-action-btn" mat-raised-button color="primary" (click)="apply(job.id)">Apply</button>
+      <span class="job-date"
+        >{{job.date.toDate().getFullYear()}}-{{(job.date.toDate().getMonth()+1).toString().padStart(2,'0')}}-{{job.date.toDate().getDate()}}
+        {{job.date.toDate().getHours().toString().padStart(2,'0')}}:{{job.date.toDate().getMinutes().toString().padStart(2,'0')}}</span
+      >
+    </mat-card-actions>
+  </mat-card>
+  }
+</div>
+<mat-paginator
+  class="job-paginator"
+  (page)="handlePageEvent($event)"
+  [length]="length"
+  [pageSize]="pageSize"
+  [disabled]="false"
+  [showFirstLastButtons]="true"
+  [pageSizeOptions]="[1,5,10,25]"
+  [hidePageSize]="false"
+  [pageIndex]="pageIndex"
+  aria-label="Select page"
+>
+</mat-paginator>

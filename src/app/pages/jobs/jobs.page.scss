@@ -1,0 +1,62 @@
+:host {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .search-container {
+    width: 100%;
+    text-align: center;
+  }
+  .card-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .job-card {
+      width: 70%;
+      margin: 10px 0;
+
+      .job-title {
+        margin-bottom: 10px;
+        a {
+          text-decoration: none;
+          cursor: pointer;
+          color: inherit;
+        }
+        a:hover {
+          text-decoration: underline;
+        }
+      }
+
+      .job-subtitle {
+        color: #323c50;
+        padding-top: 5px;
+        font-weight: normal;
+        a {
+          color: inherit;
+          text-decoration: none;
+          cursor: pointer;
+        }
+        a:hover {
+          text-decoration: underline;
+        }
+      }
+      .job-content {
+        margin: 20px 0;
+      }
+      .job-actions {
+        .job-action-btn {
+          border-radius: 8px;
+        }
+        .job-date {
+          color: #848a96;
+          position: absolute;
+          right: 12px;
+        }
+      }
+    }
+  }
+  .job-paginator {
+    width: 100%;
+  }
+}

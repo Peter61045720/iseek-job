@@ -1,8 +1,8 @@
 export interface Company {
   id: string;
+  location: string;
+  logo: string;
   name: string;
-  email: string;
-  address: string;
-  phone: string;
-  taxNumber: string;
+  phone_num: string;
+  tax_num: string;
 }
