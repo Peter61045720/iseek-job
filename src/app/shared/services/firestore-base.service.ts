@@ -4,11 +4,20 @@ import {
   deleteDoc,
   doc,
   DocumentData,
+  DocumentSnapshot,
   Firestore,
+  getCountFromServer,
   getDoc,
   getDocs,
+  limit,
+  orderBy,
   query,
+  QueryDocumentSnapshot,
+  QueryFieldFilterConstraint,
+  QueryStartAtConstraint,
   setDoc,
+  startAfter,
+  startAt,
   updateDoc,
   where,
   WhereFilterOp,
@@ -47,6 +56,11 @@ export class FirestoreBaseService<T extends { id: string }> {
       ...doc.data(),
     })) as T[];
   }
+  async countAll(collectionName: string): Promise<number> {
+    const coll = collection(this.firestore, collectionName);
+    const snapshot = await getCountFromServer(coll);
+    return snapshot.data().count;
+  }
 
   async getByField(
     collectionName: string,
@@ -69,5 +83,23 @@ export class FirestoreBaseService<T extends { id: string }> {
   delete(collectionName: string, id: string): Promise<void> {
     const docRef = doc(this.firestore, `${collectionName}/${id}`);
     return deleteDoc(docRef);
+  }
+
+  async getAllFiltered(
+    collectionName: string,
+    pageSize: number,
+    currentPage: number,
+    filters: (QueryFieldFilterConstraint | QueryStartAtConstraint)[]
+  ): Promise<QueryDocumentSnapshot[]> {
+    const docSnapshots = await getDocs(
+      query(
+        collection(this.firestore, collectionName),
+        orderBy('date', 'desc'),
+        limit(pageSize),
+        ...filters
+      )
+    );
+
+    return docSnapshots.docs;
   }
 }
