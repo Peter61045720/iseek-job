@@ -1,6 +1,16 @@
 <mat-toolbar>
   <span>iSeekJob</span>
   <span class="spacer"></span>
+  <mat-nav-list>
+    @for (navItem of navList; track navItem) {
+      @if (!navItem.hidden) {
+        <a mat-list-item class="nav-item" [disabled]="navItem.disabled" [routerLink]="navItem.route">
+          <span class="nav-label">{{ navItem.label }}</span>
+        </a>
+      }
+    }
+  </mat-nav-list>
+  <span class="spacer"></span>
   <button mat-icon-button [matMenuTriggerFor]="menu">
     <mat-icon>account_circle</mat-icon>
   </button>

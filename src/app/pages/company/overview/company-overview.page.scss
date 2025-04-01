@@ -1,0 +1,21 @@
+.overview-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+}
+
+mat-card {
+  background-color: aliceblue;
+}
+
+mat-card-header {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+
+mat-card-content {
+  display: flex;
+  justify-content: center;
+}

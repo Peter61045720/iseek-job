@@ -1,1 +1,18 @@
-<p>company-overview works!</p>
+<div class="overview-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Company details</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item><strong>id:</strong> {{ company.id }}</mat-list-item>
+        <mat-list-item><strong>name:</strong> {{ company.name }}</mat-list-item>
+        <mat-list-item><strong>email:</strong> {{ company.email }}</mat-list-item>
+        <mat-list-item><strong>phone number:</strong> {{ company.phone }}</mat-list-item>
+        <mat-list-item><strong>location:</strong> {{ company.location }}</mat-list-item>
+        <mat-list-item><strong>tax number:</strong> {{ company.taxNumber }}</mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>
