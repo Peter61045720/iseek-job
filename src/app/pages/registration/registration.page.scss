@@ -35,6 +35,11 @@ mat-card-header {
   padding-bottom: 10px;
 }
 
+mat-card-content {
+  display: flex;
+  justify-content: center;
+}
+
 mat-card-actions {
   display: flex;
   gap: 24px;

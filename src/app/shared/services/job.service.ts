@@ -26,7 +26,7 @@ export class JobService {
   private collectionName = 'Jobs';
 
   public create(job: Job): Promise<void> {
-    return this.baseService.create(this.collectionName, job);
+    return this.baseService.createWithAutoId(this.collectionName, job);
   }
 
   public async getAll(): Promise<Job[]> {

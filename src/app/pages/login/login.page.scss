@@ -49,6 +49,11 @@ mat-card-header {
   padding-bottom: 10px;
 }
 
+mat-card-content {
+  display: flex;
+  justify-content: center;
+}
+
 mat-card-actions {
   margin: 0px 5px;
   padding: 16px 16px 8px 16px;

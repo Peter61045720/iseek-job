@@ -16,10 +16,6 @@ export class UserService {
     return this.baseService.createWithId(this.collectionName, user);
   }
 
-  createUserWithAutoId(user: User): Promise<void> {
-    return this.baseService.create(this.collectionName, user);
-  }
-
   getUserById(id: string): Promise<User | null> {
     return this.baseService.getById(this.collectionName, id);
   }

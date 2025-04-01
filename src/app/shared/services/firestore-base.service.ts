@@ -4,7 +4,6 @@ import {
   deleteDoc,
   doc,
   DocumentData,
-  DocumentSnapshot,
   Firestore,
   getCountFromServer,
   getDoc,
@@ -16,8 +15,6 @@ import {
   QueryFieldFilterConstraint,
   QueryStartAtConstraint,
   setDoc,
-  startAfter,
-  startAt,
   updateDoc,
   where,
   WhereFilterOp,
@@ -34,11 +31,11 @@ export class FirestoreBaseService<T extends { id: string }> {
     return setDoc(docRef, data);
   }
 
-  create(collectionName: string, data: T): Promise<void> {
-    const id = doc(collection(this.firestore, collectionName)).id;
-    const docRef = doc(this.firestore, `${collectionName}/${id}`);
-    data.id = id;
-    return setDoc(docRef, data);
+  async createWithAutoId(collectionName: string, data: T): Promise<T> {
+    const docRef = doc(collection(this.firestore, collectionName));
+    data.id = docRef.id;
+    await setDoc(docRef, data);
+    return data;
   }
 
   async getById(collectionName: string, id: string): Promise<T | null> {
@@ -56,6 +53,7 @@ export class FirestoreBaseService<T extends { id: string }> {
       ...doc.data(),
     })) as T[];
   }
+
   async countAll(collectionName: string): Promise<number> {
     const coll = collection(this.firestore, collectionName);
     const snapshot = await getCountFromServer(coll);

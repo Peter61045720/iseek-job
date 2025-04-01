@@ -1,69 +1,138 @@
 <div class="registration-container">
-  <mat-card>
+  <mat-card class="base-card">
     <mat-card-header>
-      <mat-card-title>Contact Registration</mat-card-title>
+      <mat-card-title>Contact and Company registration</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
-      <form class="registration-form" [formGroup]="contactForm" (ngSubmit)="register()">
-        <mat-form-field appearance="outline">
-          <mat-label>Full Name</mat-label>
-          <input matInput formControlName="name" />
-          <mat-error *ngIf="contactForm.get('name')?.hasError('required') && contactForm.get('name')?.touched">
-            Please enter your full name.
-          </mat-error>
-          <mat-error *ngIf="contactForm.get('name')?.hasError('pattern') && contactForm.get('name')?.touched">
-            Your name is not appropriate.
-          </mat-error>
-        </mat-form-field>
+      <mat-card class="contact-card">
+        <mat-card-header>
+          <mat-card-title>Contact Form</mat-card-title>
+        </mat-card-header>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" />
-          <mat-error *ngIf="!contactForm.get('email')?.valid && contactForm.get('email')?.touched"> Please enter a valid email address. </mat-error>
-        </mat-form-field>
+        <mat-card-content>
+          <form class="registration-form" [formGroup]="contactForm">
+            <mat-form-field appearance="outline">
+              <mat-label>Full Name</mat-label>
+              <input matInput formControlName="name" />
+              <mat-error *ngIf="contactForm.get('name')?.hasError('required') && contactForm.get('name')?.touched">
+                Please enter your full name.
+              </mat-error>
+              <mat-error *ngIf="contactForm.get('name')?.hasError('pattern') && contactForm.get('name')?.touched">
+                Please enter a valid name.
+              </mat-error>
+            </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Phone number</mat-label>
-          <input matInput formControlName="phone" />
-          <mat-error *ngIf="contactForm.get('phone')?.hasError('phone') && contactForm.get('phone')?.touched">
-            Please enter your phone number.
-          </mat-error>
-          <mat-error *ngIf="contactForm.get('phone')?.hasError('pattern') && contactForm.get('phone')?.touched"> Invalid phone number. </mat-error>
-        </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput type="email" formControlName="email" />
+              <mat-error *ngIf="!contactForm.get('email')?.valid && contactForm.get('email')?.touched">
+                Please enter a valid email address.
+              </mat-error>
+            </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Password</mat-label>
-          <input matInput type="password" formControlName="password" />
-          <mat-error *ngIf="contactForm.get('password')?.hasError('required') && contactForm.get('password')?.touched">
-            Please enter your password.
-          </mat-error>
-          <mat-error *ngIf="contactForm.get('password')?.hasError('minlength') && contactForm.get('password')?.touched">
-            Password must be at least 8 characters.
-          </mat-error>
-        </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Phone number</mat-label>
+              <input matInput formControlName="phone" />
+              <mat-error *ngIf="contactForm.get('phone')?.hasError('required') && contactForm.get('phone')?.touched">
+                Please enter your phone number.
+              </mat-error>
+              <mat-error *ngIf="contactForm.get('phone')?.hasError('pattern') && contactForm.get('phone')?.touched">
+                Invalid phone number.
+              </mat-error>
+            </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Confirm Password</mat-label>
-          <input matInput type="password" formControlName="confirmPassword" />
-          <mat-error *ngIf="contactForm.get('confirmPassword')?.hasError('required') && contactForm.get('confirmPassword')?.touched">
-            Please enter your password again.
-          </mat-error>
-          <mat-error *ngIf="contactForm.get('confirmPassword')?.hasError('minlength') && contactForm.get('confirmPassword')?.touched">
-            Password must be at least 8 characters.
-          </mat-error>
-        </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Password</mat-label>
+              <input matInput type="password" formControlName="password" />
+              <mat-error *ngIf="contactForm.get('password')?.hasError('required') && contactForm.get('password')?.touched">
+                Please enter your password.
+              </mat-error>
+              <mat-error *ngIf="contactForm.get('password')?.hasError('minlength') && contactForm.get('password')?.touched">
+                Password must be at least 8 characters.
+              </mat-error>
+            </mat-form-field>
 
-        <mat-error class="form-error" *ngIf="contactForm.hasError('passwordMismatch') && contactForm.get('confirmPassword')?.touched">
-          Passwords do not match.
-        </mat-error>
+            <mat-form-field appearance="outline">
+              <mat-label>Confirm Password</mat-label>
+              <input matInput type="password" formControlName="confirmPassword" />
+              <mat-error *ngIf="contactForm.get('confirmPassword')?.hasError('required') && contactForm.get('confirmPassword')?.touched">
+                Please enter your password again.
+              </mat-error>
+              <mat-error *ngIf="contactForm.get('confirmPassword')?.hasError('minlength') && contactForm.get('confirmPassword')?.touched">
+                Password must be at least 8 characters.
+              </mat-error>
+            </mat-form-field>
 
-        <button mat-flat-button type="submit" [disabled]="!isFormValid">Register</button>
-      </form>
+            <mat-error class="form-error" *ngIf="contactForm.hasError('passwordMismatch') && contactForm.get('confirmPassword')?.touched">
+              Passwords do not match.
+            </mat-error>
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="company-card">
+        <mat-card-header>
+          <mat-card-title>Company Form</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form class="registration-form" [formGroup]="companyForm">
+            <mat-form-field appearance="outline">
+              <mat-label>Company Name</mat-label>
+              <input matInput formControlName="name" />
+              <mat-error *ngIf="companyForm.get('name')?.hasError('required') && companyForm.get('name')?.touched">
+                Please enter a company name.
+              </mat-error>
+              <mat-error *ngIf="companyForm.get('name')?.hasError('pattern') && companyForm.get('name')?.touched">
+                Please enter a valid name.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput type="email" formControlName="email" />
+              <mat-error *ngIf="!companyForm.get('email')?.valid && companyForm.get('email')?.touched">
+                Please enter a valid email address.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Phone number</mat-label>
+              <input matInput formControlName="phone" />
+              <mat-error *ngIf="companyForm.get('phone')?.hasError('required') && companyForm.get('phone')?.touched">
+                Please enter a phone number.
+              </mat-error>
+              <mat-error *ngIf="companyForm.get('phone')?.hasError('pattern') && companyForm.get('phone')?.touched">
+                Invalid phone number.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Location</mat-label>
+              <input matInput formControlName="location" />
+              <mat-error *ngIf="companyForm.get('location')?.hasError('required') && companyForm.get('location')?.touched">
+                Please enter a location.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Tax number</mat-label>
+              <input matInput formControlName="taxNumber" />
+              <mat-error *ngIf="companyForm.get('taxNumber')?.hasError('required') && companyForm.get('taxNumber')?.touched">
+                Please enter a tax number.
+              </mat-error>
+              <mat-error *ngIf="companyForm.get('taxNumber')?.hasError('pattern') && companyForm.get('taxNumber')?.touched">
+                Invalid tax number.
+              </mat-error>
+            </mat-form-field>
+          </form>
+        </mat-card-content>
+      </mat-card>
     </mat-card-content>
-
     <mat-card-actions>
-      <button mat-button routerLink="/login">Back to login</button>
+      <button mat-flat-button [disabled]="!areFormsValid" (click)="register()">Register</button>
+      <button mat-button routerLink="/home">Back to login</button>
     </mat-card-actions>
   </mat-card>
 </div>
