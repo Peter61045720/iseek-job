@@ -21,6 +21,7 @@ import { firstValueFrom } from 'rxjs';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { FirebaseError } from '@angular/fire/app';
 import { UserRole } from '../../shared/enums/user-role.enum';
+import { generateSearchKeywords } from '../../shared/functions/generate-search-keywords.function';
 
 @Component({
   selector: 'app-registration',
@@ -102,6 +103,10 @@ export class RegistrationPage {
           email: this.registrationForm.get('email')!.value!,
           residence: this.registrationForm.get('residence')!.value!,
           role: UserRole.User,
+          usernameSearchKeywords: generateSearchKeywords(
+            this.registrationForm.get('username')!.value!
+          ),
+          emailSearchKeywords: generateSearchKeywords(this.registrationForm.get('email')!.value!),
         };
         this.userService.createUser(user);
         this.router.navigateByUrl('/home');

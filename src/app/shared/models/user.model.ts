@@ -7,4 +7,6 @@ export interface User {
   email: string;
   residence: string;
   role: UserRole;
+  usernameSearchKeywords: string[];
+  emailSearchKeywords: string[];
 }
