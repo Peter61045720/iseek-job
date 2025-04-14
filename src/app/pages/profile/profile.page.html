@@ -1,33 +1,67 @@
-<div class="profile-div">
-  <div class="details">
-    <mat-card *ngIf="user$ | async as user">
-      <mat-card-header>
-        <mat-card-title>Your Profile:</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p>
-          <strong>Username: </strong>
-          <span *ngIf="editingField !== 'username'">{{ user.username }}</span>
-          <input *ngIf="editingField === 'username'" [(ngModel)]="editedValue" (input)="filterUserNameInput()" (blur)="saveChanges('username')" />
-          <mat-icon mat-icon-button class="edit-button-icon" (click)="startEditing('username', user.username)"> edit </mat-icon>
-        </p>
-        <p>
-          <strong>Full Name: </strong>
-          <span *ngIf="editingField !== 'name'">{{ user.name }}</span>
-          <input *ngIf="editingField === 'name'" [(ngModel)]="editedValue" (input)="filterNRInput()" (blur)="saveChanges('name')" />
-          <mat-icon mat-icon-button class="edit-button-icon" (click)="startEditing('name', user.name)"> edit </mat-icon>
-        </p>
-        <p><strong> Email: </strong>{{user.email}}</p>
-        <p>
-          <strong>Residence: </strong>
-          <span *ngIf="editingField !== 'residence'">{{ user.residence }}</span>
-          <input *ngIf="editingField === 'residence'" [(ngModel)]="editedValue" (input)="filterNRInput()" (blur)="saveChanges('residence')" />
-          <mat-icon mat-icon-button class="edit-button-icon" (click)="startEditing('residence', user.residence)"> edit </mat-icon>
-        </p>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  <div class="go-back-button-div">
-    <button mat-flat-button class="go-back-button" (click)="goBack()">⬅ Back</button>
-  </div>
+<div class="card-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <span> My profile </span>
+        <span>
+          @if (!isEditing) {
+          <button mat-icon-button (click)="toggleEdit()">
+            <mat-icon class="edit"> edit </mat-icon>
+          </button>
+          } @else {
+          <button mat-icon-button [disabled]="!isFormValid" (click)="save()">
+            <mat-icon class="check"> check </mat-icon>
+          </button>
+          <button mat-icon-button (click)="toggleEdit()">
+            <mat-icon class="close"> close </mat-icon>
+          </button>
+          }
+        </span>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form class="profile-form" [formGroup]="profileForm">
+        <mat-form-field appearance="outline">
+          <mat-label>id</mat-label>
+          <input matInput formControlName="id" [readonly]="true" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>email</mat-label>
+          <input matInput type="email" formControlName="email" [readonly]="true" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>username</mat-label>
+          <input matInput formControlName="username" [readonly]="!isEditing" />
+          <mat-error *ngIf="!profileForm.get('username')?.valid && profileForm.get('username')?.touched"> Please enter your username. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>name</mat-label>
+          <input matInput formControlName="name" [readonly]="!isEditing" />
+          <mat-error *ngIf="!profileForm.get('name')?.valid && profileForm.get('name')?.touched">Please enter a valid name.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>residence</mat-label>
+          <input matInput type="residence" formControlName="residence" [readonly]="!isEditing" />
+          <mat-error *ngIf="!profileForm.get('residence')?.valid && profileForm.get('residence')?.touched">
+            Please enter a valid residence.
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        <span> Go Back </span>
+      </button>
+      <button mat-flat-button class="delete-button">
+        <mat-icon>delete_forever</mat-icon>
+        <span> Delete Account </span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
 </div>

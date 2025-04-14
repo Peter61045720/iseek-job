@@ -1,95 +1,147 @@
 import { AuthService } from './../../shared/services/auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { UserService } from '../../shared/services/user.service';
-import { Observable, of } from 'rxjs';
 import { User } from '../../shared/models/user.model';
-import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardHeader,
+  MatCardTitle,
+} from '@angular/material/card';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { generateSearchKeywords } from '../../shared/functions/generate-search-keywords.function';
+import { HotToastService } from '@ngxpert/hot-toast';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [
-    FormsModule,
     CommonModule,
+    ReactiveFormsModule,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    MatError,
     MatButtonModule,
     MatCard,
     MatCardHeader,
     MatCardTitle,
     MatCardContent,
+    MatCardActions,
     MatIcon,
   ],
   templateUrl: './profile.page.html',
   styleUrl: './profile.page.scss',
 })
-export class ProfilePage implements OnInit {
-  user$: Observable<User | null> = of(null);
-  userId: string | null = null;
-  editingField: string | null = null;
-  editedValue = '';
+export class ProfilePage implements OnInit, OnDestroy {
+  isEditing = false;
+  user: User | null = null;
+  subscription: Subscription | null = null;
+
+  profileForm = new FormGroup({
+    id: new FormControl(''),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    username: new FormControl('', Validators.required),
+    name: new FormControl('', [
+      Validators.required,
+      Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '-][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/),
+    ]),
+    residence: new FormControl('', [
+      Validators.required,
+      Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+[.,]?(([ '-])[A-Za-zÀ-ÖØ-öø-ÿ0-9]+\.?)*$/),
+    ]),
+  });
 
   constructor(
     private authService: AuthService,
     private userService: UserService,
+    private toast: HotToastService,
     private router: Router
   ) {}
 
+  get isFormValid(): boolean {
+    return this.profileForm.valid;
+  }
+
   ngOnInit(): void {
+    this.profileForm.disable();
     const userId = this.authService.getUserUid();
 
     if (!userId) {
-      this.router.navigate(['/login']);
-      return;
-    }
-
-    this.user$ = this.userService.getUserById$(userId);
-    console.log(userId);
-    this.userId = userId;
-  }
-
-  startEditing(field: string, value: string) {
-    this.editingField = field;
-    this.editedValue = value;
-  }
-
-  async saveChanges(field: string) {
-    if (this.userId && this.editedValue.trim() !== '') {
-      const updatedData: Partial<User> = {
-        [field]: this.editedValue,
-      };
-
-      try {
-        await this.userService.updateUser(this.userId, updatedData);
-        this.user$ = this.userService.getUserById$(this.userId);
-        this.editingField = null;
-      } catch (error) {
-        console.error('Error updating Firestore:', error);
-      }
+      this.router.navigateByUrl('/login');
     } else {
-      console.warn('Invalid data to update');
+      this.userService.getUserById(userId).then(user => {
+        if (user) {
+          this.user = user;
+          this.patchValues();
+        }
+      });
     }
   }
 
-  // Used for regex filtering name and residence
-  filterNRInput() {
-    this.editedValue = this.editedValue
-      .replace(/[^A-Za-zÀ-ÖØ-öø-ÿ' -]/g, '')
-      .replace(/(['._-]){2,}/g, '$1');
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
-  // Used for regex filtering username
-  filterUserNameInput() {
-    this.editedValue = this.editedValue
-      .replace(/[^A-Za-zÀ-ÖØ-öø-ÿ0-9._-]/g, '')
-      .replace(/(['._-]){2,}/g, '$1')
-      .replace(/^['._-]|['._-]$/g, '');
+  patchValues(): void {
+    this.profileForm.patchValue({
+      id: this.user!.id,
+      email: this.user!.email,
+      username: this.user!.username,
+      name: this.user!.name,
+      residence: this.user!.residence,
+    });
   }
 
-  goBack() {
+  toggleEdit(): void {
+    this.isEditing = !this.isEditing;
+
+    if (this.isEditing) {
+      this.profileForm.enable();
+      this.profileForm.get('id')!.disable();
+      this.profileForm.get('email')!.disable();
+    } else {
+      this.patchValues();
+      this.profileForm.disable();
+    }
+  }
+
+  save(): void {
+    this.user!.username = this.profileForm.get('username')!.value!;
+    this.user!.name = this.profileForm.get('name')!.value!;
+    this.user!.residence = this.profileForm.get('residence')!.value!;
+    this.user!.usernameSearchKeywords = generateSearchKeywords(
+      this.profileForm.get('username')!.value!
+    );
+
+    this.subscription = this.userService
+      .updateUser$(this.user!.id, this.user!)
+      .pipe(
+        this.toast.observe({
+          loading: 'Updating user...',
+          success: 'User updated successfully!',
+          error: 'Could not update user. Please try again later.',
+        })
+      )
+      .subscribe(() => {
+        this.toggleEdit();
+      });
+  }
+
+  // TODO: implement account deletion
+  // delete(): void {}
+
+  goBack(): void {
     this.router.navigateByUrl('/home');
   }
 }

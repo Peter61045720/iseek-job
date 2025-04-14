@@ -42,6 +42,10 @@ export class UserService {
     return this.baseService.update(this.collectionName, id, user);
   }
 
+  updateUser$(id: string, user: Partial<User>): Observable<void> {
+    return from(this.updateUser(id, user));
+  }
+
   deleteUser(id: string): Promise<void> {
     return this.baseService.delete(this.collectionName, id);
   }

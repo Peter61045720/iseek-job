@@ -58,7 +58,7 @@ export class RegistrationPage {
       confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
       residence: new FormControl('', [
         Validators.required,
-        Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '-][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/),
+        Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+[.,]?(([ '-])[A-Za-zÀ-ÖØ-öø-ÿ0-9]+\.?)*$/),
       ]),
     },
     passwordMatchValidator('password', 'confirmPassword')
@@ -88,9 +88,9 @@ export class RegistrationPage {
             success: () => {
               return 'Registration successful!';
             },
-            error: e => {
-              const a = e as FirebaseError;
-              return 'Registration failed: ' + a.message;
+            error: err => {
+              const { message } = err as FirebaseError;
+              return 'Registration failed: ' + message;
             },
           })
         )

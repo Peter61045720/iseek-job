@@ -61,14 +61,14 @@ export class LoginPage {
         .login$(this.loginForm.get('email')!.value!, this.loginForm.get('password')!.value!)
         .pipe(
           this.toast.observe({
-            loading: 'Bejelentkezés...',
+            loading: 'Logging in...',
             success: () => {
               this.router.navigateByUrl('/home');
-              return 'Sikeres bejelentkezés!';
+              return 'Login successful!';
             },
             error: e => {
               console.error(e);
-              return 'Sikertelen bejelentkezés!';
+              return 'Login failed!';
             },
           })
         )
