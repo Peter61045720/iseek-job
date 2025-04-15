@@ -138,8 +138,17 @@ export class ProfilePage implements OnInit, OnDestroy {
       });
   }
 
-  // TODO: implement account deletion
-  // delete(): void {}
+  async delete(): Promise<void> {
+    try {
+      // TODO: Show a confirmation modal and properly retrieve user data before deletion
+      const userCred = await this.authService.reauthenticate('email', 'pw');
+      await this.userService.deleteUser(userCred.user.uid);
+      await this.authService.delete();
+      this.router.navigateByUrl('/login');
+    } catch (err: unknown) {
+      console.log(err);
+    }
+  }
 
   goBack(): void {
     this.router.navigateByUrl('/home');

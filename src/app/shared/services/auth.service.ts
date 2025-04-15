@@ -8,6 +8,9 @@ import {
   signOut,
   User as FirebaseUser,
   UserCredential,
+  deleteUser,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
 } from '@angular/fire/auth';
 import { map, Observable, from } from 'rxjs';
 
@@ -39,6 +42,15 @@ export class AuthService {
 
   logout$(): Observable<void> {
     return from(this.logout());
+  }
+
+  delete(): Promise<void> {
+    return deleteUser(this.auth.currentUser!);
+  }
+
+  reauthenticate(email: string, password: string): Promise<UserCredential> {
+    const cred = EmailAuthProvider.credential(email, password);
+    return reauthenticateWithCredential(this.auth.currentUser!, cred);
   }
 
   getUserData(): FirebaseUser | null {
