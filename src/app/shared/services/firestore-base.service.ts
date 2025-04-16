@@ -4,6 +4,7 @@ import {
   deleteDoc,
   doc,
   DocumentData,
+  DocumentReference,
   Firestore,
   getCountFromServer,
   getDoc,
@@ -47,7 +48,9 @@ export class FirestoreBaseService<T extends { id: string }> {
       return null;
     }
   }
-
+  getDocumentRef(collectionName: string, id: string): DocumentReference {
+    return doc(this.firestore, `${collectionName}/${id}`);
+  }
   async getAll(collectionName: string): Promise<T[]> {
     return (await getDocs(collection(this.firestore, collectionName))).docs.map(doc => ({
       ...doc.data(),
@@ -59,7 +62,15 @@ export class FirestoreBaseService<T extends { id: string }> {
     const snapshot = await getCountFromServer(coll);
     return snapshot.data().count;
   }
+  async countAllFiltered(
+    collectionName: string,
+    filters: (QueryFieldFilterConstraint | QueryStartAtConstraint)[]
+  ) {
+    const coll = collection(this.firestore, collectionName);
 
+    const snapshot = await getCountFromServer(query(coll, ...filters));
+    return snapshot.data().count;
+  }
   async getByField(
     collectionName: string,
     fieldPath: string,
@@ -71,6 +82,12 @@ export class FirestoreBaseService<T extends { id: string }> {
         query(collection(this.firestore, collectionName), where(fieldPath, opStr, value))
       )
     ).docs.map(doc => ({ ...doc.data() })) as T[];
+  }
+
+  async getByFields(collectionName: string, filters: QueryFieldFilterConstraint[]): Promise<T[]> {
+    return (await getDocs(query(collection(this.firestore, collectionName), ...filters))).docs.map(
+      doc => ({ ...doc.data() })
+    ) as T[];
   }
 
   update(collectionName: string, id: string, data: Partial<T>): Promise<void> {

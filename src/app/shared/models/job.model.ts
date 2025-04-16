@@ -12,4 +12,7 @@ export interface Job {
   testing_time: string; //trial_period?
   type: string;
   work_location: string;
+
+  applied?: boolean;
+  titleSearchKeywords?: string[];
 }

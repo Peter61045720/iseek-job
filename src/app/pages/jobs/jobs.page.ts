@@ -1,3 +1,5 @@
+import { AuthService } from './../../shared/services/auth.service';
+import { Application } from './../../shared/models/application.model';
 import { JobSearchDate, JobSearchDateDescriptions } from '../../shared/enums/job-search-date.enum';
 import { Education, EducationDescriptions } from '../../shared/enums/education.enum';
 import { MatCardModule } from '@angular/material/card';
@@ -9,10 +11,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
-import { debounceTime, Subject, Subscription } from 'rxjs';
+import { debounceTime, firstValueFrom, Subject, Subscription } from 'rxjs';
 import { QueryDocumentSnapshot, Timestamp } from '@angular/fire/firestore';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { ApplicationService } from '../../shared/services/application.service';
+import { HotToastService } from '@ngxpert/hot-toast';
 
 @Component({
   selector: 'app-jobs',
@@ -56,19 +60,23 @@ export class JobsPage implements OnInit, OnDestroy {
   jobDesc = JobSearchDateDescriptions;
 
   currEducation: Education | string = Education.NONE + '';
-  currJobSearchDate: JobSearchDate | string = JobSearchDate.NONE + '';
+  currJobSearchDate: JobSearchDate | string = JobSearchDate.ALL + '';
   search = '';
 
-  constructor(private jobService: JobService) {
+  constructor(
+    private jobService: JobService,
+    private applicationSevice: ApplicationService,
+    private authService: AuthService,
+    private toast: HotToastService
+  ) {
     this.pageIndex = 0;
     this.pageSize = 10;
     this.length = 0;
-
     /*jobService.getAll().then(async data => {
       this.jobs = data;
     });*/
 
-    jobService.countAll().then(count => (this.length = count));
+    //jobService.countAll().then(count => (this.length = count));
     this.getFilteredData(0);
   }
   handlePageEvent(e: PageEvent) {
@@ -93,8 +101,8 @@ export class JobsPage implements OnInit, OnDestroy {
    * Inkább cég nevekből select, ha már úgyse tudunk pozíció névre keresni...
    */
   handleSearch(e: Event) {
-    //this.pageIndex = 0;
-    //this.modelChanged.next(this.search);
+    this.pageIndex = 0;
+    this.modelChanged.next(this.search);
   }
   private getFilteredData(dir: number) {
     let doc: QueryDocumentSnapshot | null = this.docs[0] ?? null;
@@ -104,26 +112,64 @@ export class JobsPage implements OnInit, OnDestroy {
 
     const tmp = this.docs[0];
 
-    this.jobService
-      .getAllFiltered(
-        this.pageSize,
-        this.pageIndex,
-        [
-          ['education', this.currEducation as string],
-          ['date', this.currJobSearchDate as string],
-          ['title', this.search],
-        ],
-        dir,
-        doc
-      )
-      .then(jobs => {
-        this.jobs = jobs.map(d => d.job);
-        this.docs = jobs.map(d => d.doc);
-        this.prevPageFirstJob = tmp;
-      });
+    /*const filters = [
+      ['education', this.currEducation as string],
+      ['date', this.currJobSearchDate as string],
+      ['title', this.search],
+    ];
+    */
+    const filters: Record<string, string> = {
+      'education': this.currEducation as string,
+      'date': this.currJobSearchDate as string,
+      'title': this.search.toLowerCase(),
+    };
+
+    this.jobService.getAllFiltered(this.pageSize, this.pageIndex, filters, dir, doc).then(jobs => {
+      this.jobs = jobs.map(d => d.job);
+      this.docs = jobs.map(d => d.doc);
+      this.prevPageFirstJob = tmp;
+    });
+
+    if (dir == 0) {
+      this.jobService.countAllFiltered(filters).then(count => (this.length = count));
+    }
   }
 
-  apply(id: string) {
-    console.log('apply', id);
+  apply(job_id: string, idx: number) {
+    firstValueFrom(
+      this.applicationSevice.createApplication$(this.authService.getUserUid()!, job_id).pipe(
+        this.toast.observe({
+          loading: 'Applying...',
+          success: () => {
+            this.jobs[idx].applied = true;
+            return 'Successfully applied!';
+          },
+          error: e => {
+            console.error(e);
+            const msg = typeof e === 'string' ? ' ' + e : '';
+            return 'Applying failed!' + msg;
+          },
+        })
+      )
+    );
+  }
+
+  withdraw(job_id: string, idx: number) {
+    firstValueFrom(
+      this.applicationSevice.withdrawByUserAndJob$(this.authService.getUserUid()!, job_id).pipe(
+        this.toast.observe({
+          loading: 'Withdrawing...',
+          success: () => {
+            this.jobs[idx].applied = false;
+            return 'Successfully withdrawn!';
+          },
+          error: e => {
+            console.error(e);
+            const msg = typeof e === 'string' ? ' ' + e : '';
+            return 'Withdrawing failed!' + msg;
+          },
+        })
+      )
+    );
   }
 }
