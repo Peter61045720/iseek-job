@@ -1,5 +1,6 @@
 import { DocumentReference, Timestamp } from '@angular/fire/firestore';
 import { Company } from './company.model';
+import { JobStatus } from '../enums/job-status.enum';
 
 export interface Job {
   id: string;
@@ -12,4 +13,8 @@ export interface Job {
   testing_time: string; //trial_period?
   type: string;
   work_location: string;
+  status: JobStatus;
+
+  applied?: boolean;
+  titleSearchKeywords?: string[];
 }

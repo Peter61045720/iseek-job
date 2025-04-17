@@ -38,11 +38,12 @@
     </mat-card-header>
     <mat-card-content class="job-content"> {{job.description.substring(0,150) + (job.description.length>150?"...":"")}} </mat-card-content>
     <mat-card-actions class="job-actions">
-      <button class="job-action-btn" mat-raised-button color="primary" (click)="apply(job.id)">Apply</button>
-      <span class="job-date"
-        >{{job.date.toDate().getFullYear()}}-{{(job.date.toDate().getMonth()+1).toString().padStart(2,'0')}}-{{job.date.toDate().getDate()}}
-        {{job.date.toDate().getHours().toString().padStart(2,'0')}}:{{job.date.toDate().getMinutes().toString().padStart(2,'0')}}</span
-      >
+      @if(job.applied === true){
+      <button class="job-action-btn" mat-raised-button color="secondary" (click)="withdraw(job.id, $index)">Withdraw</button>
+      } @else {
+      <button class="job-action-btn" mat-raised-button color="primary" (click)="apply(job.id, $index)">Apply</button>
+      }
+      <span class="job-date">{{job.date.toDate() | date:'longDate'}}, {{job.date.toDate() | date:'shortTime'}}</span>
     </mat-card-actions>
   </mat-card>
   }
