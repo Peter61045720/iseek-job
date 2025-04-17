@@ -1,5 +1,5 @@
 import { AuthService } from './../../shared/services/auth.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
@@ -19,6 +19,8 @@ import { MatInput } from '@angular/material/input';
 import { generateSearchKeywords } from '../../shared/functions/generate-search-keywords.function';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { Subscription } from 'rxjs';
+import { DeleteAccountDialog } from '../../shared/components/dialogs/delete-account/delete-account.dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-profile',
@@ -42,6 +44,8 @@ import { Subscription } from 'rxjs';
   styleUrl: './profile.page.scss',
 })
 export class ProfilePage implements OnInit, OnDestroy {
+  readonly password = signal('');
+
   isEditing = false;
   user: User | null = null;
   subscription: Subscription | null = null;
@@ -61,6 +65,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   });
 
   constructor(
+    private readonly dialog: MatDialog,
     private authService: AuthService,
     private userService: UserService,
     private toast: HotToastService,
@@ -116,6 +121,19 @@ export class ProfilePage implements OnInit, OnDestroy {
     }
   }
 
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DeleteAccountDialog, {
+      data: { password: this.password() },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.password.set(result);
+        this.delete();
+      }
+    });
+  }
+
   save(): void {
     this.user!.username = this.profileForm.get('username')!.value!;
     this.user!.name = this.profileForm.get('name')!.value!;
@@ -139,14 +157,18 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   async delete(): Promise<void> {
+    const loadingToast = this.toast.loading('Deleting account...');
+
     try {
-      // TODO: Show a confirmation modal and properly retrieve user data before deletion
-      const userCred = await this.authService.reauthenticate('email', 'pw');
+      const userCred = await this.authService.reauthenticate(this.user!.email, this.password());
       await this.userService.deleteUser(userCred.user.uid);
       await this.authService.delete();
+      this.toast.success('Account deleted successfully');
       this.router.navigateByUrl('/login');
-    } catch (err: unknown) {
-      console.log(err);
+    } catch {
+      this.toast.error('The password you entered is incorrect.');
+    } finally {
+      loadingToast.close();
     }
   }
 

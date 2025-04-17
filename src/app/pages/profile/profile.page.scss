@@ -1,17 +1,7 @@
-@use '@angular/material' as mat;
-
 .profile-form {
   display: flex;
   flex-direction: column;
   width: 40vh;
-}
-
-.delete-button {
-  @include mat.button-overrides(
-    (
-      filled-container-color: var(--mat-sys-error),
-    )
-  );
 }
 
 .edit {

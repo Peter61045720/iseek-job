@@ -1,6 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 /* Importing @ngxpert/hot-toast SCSS file. */
 @use '@ngxpert/hot-toast/styles';
+@use '@angular/material' as mat;
+
+.mat-danger-button {
+  @include mat.button-overrides(
+    (
+      filled-container-color: var(--mat-sys-error),
+    )
+  );
+}
 
 .card-container {
   display: flex;

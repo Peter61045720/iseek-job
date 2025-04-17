@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>Delete Account</h2>
+
+<mat-dialog-content>
+  <p>Please confirm your password to permanently delete your account.</p>
+  <mat-form-field appearance="outline">
+    <mat-label>Password</mat-label>
+    <input matInput [(ngModel)]="password" type="password" cdkFocusInitial />
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-flat-button [disabled]="!password()" [mat-dialog-close]="password()" color="danger-button">Delete</button>
+  <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>
