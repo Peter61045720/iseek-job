@@ -55,7 +55,7 @@ export class JobService {
   ): Promise<{ doc: QueryDocumentSnapshot; job: Job }[]> {
     //Nincs már full-text search firestoreba :'(
     const customFilters = this.createFilters(filters);
-    console.log(customFilters);
+
     if (currentPage !== 0) {
       if (dir == 1) customFilters.push(startAfter(lastDoc));
       if (dir == 0) customFilters.push(startAt(lastDoc));
@@ -86,8 +86,9 @@ export class JobService {
     );
   }
 
-  public getByCompanyId(companyId: string): Promise<Job[]> {
-    return this.baseService.getByField(this.collectionName, 'company_id', '==', companyId);
+  public getByCompanyRef(companyId: string): Promise<Job[]> {
+    const companyRef = this.baseService.getDocumentRef('Companies', companyId);
+    return this.baseService.getByField(this.collectionName, 'company_ref', '==', companyRef);
   }
 
   private createFilters(filters: Record<string, string>) {
@@ -95,10 +96,7 @@ export class JobService {
       .map(([key, value]) => {
         if (key == 'date') {
           const date = new Date();
-          console.log(
-            'date start',
-            `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate()}`
-          );
+
           switch (value) {
             case JobSearchDate.LAST_DAY.toString():
               date.setDate(date.getDate() - 1);
@@ -116,10 +114,6 @@ export class JobService {
             default:
               return null;
           }
-          console.log(
-            'date calculated',
-            `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate()}`
-          );
 
           return where(key, '>=', Timestamp.fromDate(date));
         }

@@ -64,6 +64,11 @@ export const routes: Routes = [
             p => p.ContactRegistrationPage
           ),
       },
+      {
+        path: 'applications/:id',
+        loadComponent: () =>
+          import('./pages/applications/applications.page').then(p => p.ApplicationsPage),
+      },
     ],
   },
   {

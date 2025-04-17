@@ -1,6 +1,8 @@
 import { DocumentReference, Timestamp } from '@angular/fire/firestore';
 import { Job } from './job.model';
 import { User } from './user.model';
+import { ApplicationStatus } from '../enums/application-status.enum';
+import { Company } from './company.model';
 
 export interface Application {
   id: string;
@@ -12,5 +14,9 @@ export interface Application {
   user_ref: DocumentReference;
   user?: User;
 
-  status: number;
+  company_ref: DocumentReference;
+  company?: Company;
+
+  status: ApplicationStatus;
+  allSearchKeywords?: string[];
 }

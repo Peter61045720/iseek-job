@@ -17,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ApplicationService } from '../../shared/services/application.service';
 import { HotToastService } from '@ngxpert/hot-toast';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-jobs',
@@ -29,6 +30,7 @@ import { HotToastService } from '@ngxpert/hot-toast';
     MatSelectModule,
     MatIconModule,
     MatButtonModule,
+    DatePipe,
   ],
   templateUrl: './jobs.page.html',
   styleUrl: './jobs.page.scss',
@@ -65,7 +67,7 @@ export class JobsPage implements OnInit, OnDestroy {
 
   constructor(
     private jobService: JobService,
-    private applicationSevice: ApplicationService,
+    private applicationService: ApplicationService,
     private authService: AuthService,
     private toast: HotToastService
   ) {
@@ -137,7 +139,7 @@ export class JobsPage implements OnInit, OnDestroy {
 
   apply(job_id: string, idx: number) {
     firstValueFrom(
-      this.applicationSevice.createApplication$(this.authService.getUserUid()!, job_id).pipe(
+      this.applicationService.createApplication$(this.authService.getUserUid()!, job_id).pipe(
         this.toast.observe({
           loading: 'Applying...',
           success: () => {
@@ -156,7 +158,7 @@ export class JobsPage implements OnInit, OnDestroy {
 
   withdraw(job_id: string, idx: number) {
     firstValueFrom(
-      this.applicationSevice.withdrawByUserAndJob$(this.authService.getUserUid()!, job_id).pipe(
+      this.applicationService.withdrawByUserAndJob$(this.authService.getUserUid()!, job_id).pipe(
         this.toast.observe({
           loading: 'Withdrawing...',
           success: () => {
