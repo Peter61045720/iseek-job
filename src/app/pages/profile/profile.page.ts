@@ -78,12 +78,12 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.profileForm.disable();
-    const userId = this.authService.getUserUid();
+    const uid = this.authService.getUserUid();
 
-    if (!userId) {
+    if (!uid) {
       this.router.navigateByUrl('/login');
     } else {
-      this.userService.getUserById(userId).then(user => {
+      this.userService.getUserById(uid).then(user => {
         if (user) {
           this.user = user;
           this.patchValues();

@@ -11,6 +11,9 @@ import { AuthService } from '../../../shared/services/auth.service';
 import { ContactService } from '../../../shared/services/contact.service';
 import { Contact } from '../../../shared/models/contact.model';
 import { UserRole } from '../../../shared/enums/user-role.enum';
+import { Role } from '../../../shared/models/role.model';
+import { RoleService } from '../../../shared/services/role.service';
+import { generateSearchKeywords } from '../../../shared/functions/generate-search-keywords.function';
 
 @Component({
   selector: 'app-contact-registration',
@@ -50,6 +53,7 @@ export class ContactRegistrationPage implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
+    private roleService: RoleService,
     private contactService: ContactService
   ) {
     this.contactId = this.authService.getUserUid()!;
@@ -68,19 +72,27 @@ export class ContactRegistrationPage implements OnInit {
   register(): void {
     this.authService
       .register(this.contactForm.get('email')!.value!, this.contactForm.get('password')!.value!)
-      .then(userCred => {
+      .then(async userCred => {
+        const uid = userCred.user.uid;
+
         const contact: Contact = {
-          id: userCred.user.uid,
+          id: uid,
           name: this.contactForm.get('name')!.value!,
           email: this.contactForm.get('email')!.value!,
+          emailSearchKeywords: generateSearchKeywords(this.contactForm.get('email')!.value!),
           phone: this.contactForm.get('phone')!.value!,
-          role: UserRole.Contact,
           companyId: this.companyId,
         };
 
-        this.contactService.createContact(contact).then(() => {
-          this.router.navigateByUrl('/home');
-        });
+        const role: Role = {
+          id: uid,
+          role: UserRole.Contact,
+        };
+
+        await this.contactService.createContact(contact);
+        await this.roleService.createRole(role);
+
+        this.router.navigateByUrl('/home');
       });
   }
 }

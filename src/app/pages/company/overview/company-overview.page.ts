@@ -27,18 +27,18 @@ import { Company } from '../../../shared/models/company.model';
 })
 export class CompanyOverviewPage implements OnInit {
   company!: Company;
-  userId: string;
+  uid: string;
 
   constructor(
     private authService: AuthService,
     private contactService: ContactService,
     private companyService: CompanyService
   ) {
-    this.userId = this.authService.getUserUid()!;
+    this.uid = this.authService.getUserUid()!;
   }
 
   ngOnInit(): void {
-    this.contactService.getContactById(this.userId).then(contact => {
+    this.contactService.getContactById(this.uid).then(contact => {
       this.companyService.getCompanyById(contact!.companyId!).then(company => {
         this.company = company!;
       });

@@ -20,6 +20,9 @@ import { UserRole } from '../../../shared/enums/user-role.enum';
 import { Company } from '../../../shared/models/company.model';
 import { CompanyService } from '../../../shared/services/company.service';
 import { ContactService } from '../../../shared/services/contact.service';
+import { Role } from '../../../shared/models/role.model';
+import { RoleService } from '../../../shared/services/role.service';
+import { generateSearchKeywords } from '../../../shared/functions/generate-search-keywords.function';
 
 @Component({
   selector: 'app-company-registration',
@@ -71,6 +74,7 @@ export class CompanyRegistrationPage {
   constructor(
     private router: Router,
     private authService: AuthService,
+    private roleService: RoleService,
     private companyService: CompanyService,
     private contactService: ContactService,
     private toast: HotToastService
@@ -92,19 +96,27 @@ export class CompanyRegistrationPage {
           taxNumber: this.companyForm.get('taxNumber')!.value!,
         };
 
-        this.companyService.createCompany(partialCompany).then(company => {
+        this.companyService.createCompany(partialCompany).then(async company => {
+          const uid = userCred.user.uid;
+
           const contact: Contact = {
-            id: userCred.user.uid,
+            id: uid,
             name: this.contactForm.get('name')!.value!,
             email: this.contactForm.get('email')!.value!,
+            emailSearchKeywords: generateSearchKeywords(this.contactForm.get('email')!.value!),
             phone: this.contactForm.get('phone')!.value!,
-            role: UserRole.Contact,
             companyId: company.id,
           };
 
-          this.contactService.createContact(contact).then(() => {
-            this.router.navigateByUrl('/home');
-          });
+          const role: Role = {
+            id: uid,
+            role: UserRole.Contact,
+          };
+
+          await this.contactService.createContact(contact);
+          await this.roleService.createRole(role);
+
+          this.router.navigateByUrl('/home');
         });
       });
   }

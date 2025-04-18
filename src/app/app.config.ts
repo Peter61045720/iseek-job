@@ -25,6 +25,8 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
-    provideHotToastConfig(),
+    provideHotToastConfig({
+      duration: 1500,
+    }),
   ],
 };

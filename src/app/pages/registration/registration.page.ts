@@ -20,8 +20,10 @@ import { User } from '../../shared/models/user.model';
 import { firstValueFrom } from 'rxjs';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { FirebaseError } from '@angular/fire/app';
-import { UserRole } from '../../shared/enums/user-role.enum';
 import { generateSearchKeywords } from '../../shared/functions/generate-search-keywords.function';
+import { RoleService } from '../../shared/services/role.service';
+import { UserRole } from '../../shared/enums/user-role.enum';
+import { Role } from '../../shared/models/role.model';
 
 @Component({
   selector: 'app-registration',
@@ -67,6 +69,7 @@ export class RegistrationPage {
   constructor(
     private router: Router,
     private authService: AuthService,
+    private roleService: RoleService,
     private userService: UserService,
     private toast: HotToastService
   ) {}
@@ -95,20 +98,29 @@ export class RegistrationPage {
           })
         )
     )
-      .then(userCred => {
+      .then(async userCred => {
+        const uid = userCred.user.uid;
+
         const user: User = {
-          id: userCred.user.uid,
+          id: uid,
           name: this.registrationForm.get('name')!.value!,
           username: this.registrationForm.get('username')!.value!,
           email: this.registrationForm.get('email')!.value!,
           residence: this.registrationForm.get('residence')!.value!,
-          role: UserRole.User,
           usernameSearchKeywords: generateSearchKeywords(
             this.registrationForm.get('username')!.value!
           ),
           emailSearchKeywords: generateSearchKeywords(this.registrationForm.get('email')!.value!),
         };
-        this.userService.createUser(user);
+
+        const role: Role = {
+          id: uid,
+          role: UserRole.User,
+        };
+
+        await this.userService.createUser(user);
+        await this.roleService.createRole(role);
+
         this.router.navigateByUrl('/home');
       })
       .catch(error => {
