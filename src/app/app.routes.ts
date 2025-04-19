@@ -47,11 +47,6 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/home/home.page').then(p => p.HomePage),
       },
       {
-        path: 'profile',
-        loadComponent: () => import('./pages/profile/profile.page').then(p => p.ProfilePage),
-        canActivate: [roleGuard([UserRole.User, UserRole.Contact])],
-      },
-      {
         path: 'jobs',
         loadComponent: () => import('./pages/jobs/jobs.page').then(p => p.JobsPage),
         canActivate: [roleGuard([UserRole.User])],
@@ -74,6 +69,19 @@ export const routes: Routes = [
         path: 'applications/:id',
         loadComponent: () =>
           import('./pages/applications/applications.page').then(p => p.ApplicationsPage),
+        canActivate: [roleGuard([UserRole.Contact])],
+      },
+      {
+        path: 'profile',
+        loadComponent: () => import('./pages/profile/profile.page').then(p => p.ProfilePage),
+        canActivate: [roleGuard([UserRole.User])],
+      },
+      {
+        path: 'contact-profile',
+        loadComponent: () =>
+          import('./pages/profile/contact-profile/contact-profile.page').then(
+            p => p.ContactProfilePage
+          ),
         canActivate: [roleGuard([UserRole.Contact])],
       },
     ],

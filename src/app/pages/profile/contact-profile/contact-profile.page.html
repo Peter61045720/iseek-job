@@ -1,5 +1,5 @@
 <div class="card-container">
-  <mat-card *ngIf="user">
+  <mat-card *ngIf="contact">
     <mat-card-header>
       <mat-card-title>
         <span> My profile </span>
@@ -28,14 +28,13 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>email</mat-label>
-          <input matInput type="email" formControlName="email" [readonly]="true" />
+          <mat-label>company id</mat-label>
+          <input matInput formControlName="companyId" [readonly]="true" />
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>username</mat-label>
-          <input matInput formControlName="username" [readonly]="!isEditing" />
-          <mat-error *ngIf="!profileForm.get('username')?.valid && profileForm.get('username')?.touched"> Please enter your username. </mat-error>
+          <mat-label>email</mat-label>
+          <input matInput type="email" formControlName="email" [readonly]="true" />
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -45,11 +44,9 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>residence</mat-label>
-          <input matInput formControlName="residence" [readonly]="!isEditing" />
-          <mat-error *ngIf="!profileForm.get('residence')?.valid && profileForm.get('residence')?.touched">
-            Please enter a valid residence.
-          </mat-error>
+          <mat-label>phone</mat-label>
+          <input matInput formControlName="phone" [readonly]="!isEditing" />
+          <mat-error *ngIf="!profileForm.get('phone')?.valid && profileForm.get('phone')?.touched"> Please enter a valid phone number. </mat-error>
         </mat-form-field>
       </form>
     </mat-card-content>

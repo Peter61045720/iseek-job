@@ -1,0 +1,56 @@
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  width: 40vh;
+}
+
+.edit {
+  color: black;
+}
+
+.check {
+  color: green;
+}
+
+.close {
+  color: red;
+}
+
+button[mat-icon-button]:disabled .check {
+  color: lightgrey;
+}
+
+mat-card {
+  background-color: ghostwhite;
+}
+
+mat-card-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 20px;
+  margin: 5px;
+}
+
+mat-card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 38vh;
+}
+
+mat-card-content {
+  display: flex;
+  justify-content: center;
+}
+
+mat-form-field {
+  margin: 5px;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: space-between;
+  margin: 0px 5px;
+  padding: 16px;
+}

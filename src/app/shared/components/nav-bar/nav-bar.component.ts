@@ -101,7 +101,11 @@ export class NavBarComponent implements OnInit {
   }
 
   viewProfile(): void {
-    this.router.navigateByUrl('/profile');
+    if (this.role === UserRole.User) {
+      this.router.navigateByUrl('/profile');
+    } else if (this.role === UserRole.Contact) {
+      this.router.navigateByUrl('/contact-profile');
+    }
   }
 
   logout(): void {
