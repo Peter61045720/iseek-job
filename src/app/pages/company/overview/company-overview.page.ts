@@ -63,7 +63,7 @@ export class CompanyOverviewPage implements OnInit {
               this.company.name,
               [
                 Validators.required,
-                Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '-][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/),
+                Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '.-]?[A-Za-zÀ-ÖØ-öø-ÿ]+)*\.?$/),
               ],
             ],
             email: [this.company.email, [Validators.required, Validators.email]],
