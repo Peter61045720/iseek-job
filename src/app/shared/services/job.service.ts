@@ -30,6 +30,10 @@ export class JobService {
     return this.baseService.createWithAutoId(this.collectionName, job);
   }
 
+  public updateJob(jobId: string, jobData: Partial<Job>): Promise<void> {
+    return this.baseService.update(this.collectionName, jobId, jobData);
+  }
+
   public async getAll(): Promise<Job[]> {
     return Promise.all(
       (await this.baseService.getAll(this.collectionName)).map(async (job: Job) => {

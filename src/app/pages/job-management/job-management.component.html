@@ -73,16 +73,71 @@
   <ul class="job-list">
     <li *ngFor="let job of jobs" class="job-item">
       <div class="job-details">
-        <h3>{{ job.position }}</h3>
-        <p><strong>Munkavégzés helye:</strong> {{ job.work_location }}</p>
-        <p><strong>Munkatípus:</strong> {{ job.type }}</p>
-        <p><strong>Próbaidő:</strong> {{ job.testing_time }}</p>
-        <p><strong>Állapot:</strong> {{ job.status }}</p>
-        <p><strong>Feltöltve:</strong> {{ job.date.toDate() | date: 'mediumDate' }}</p>
-        <p><strong>Oktatás:</strong> {{ job.education }}</p>
-        <p><strong>Leírás:</strong> {{ job.description }}</p>
+        <!-- Edit mode -->
+        <ng-container *ngIf="editedJobId === job.id; else viewMode">
+          <form [formGroup]="editJobForm">
+            <mat-form-field appearance="fill">
+              <mat-label>Pozíció</mat-label>
+              <input matInput formControlName="position" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Helyszín</mat-label>
+              <input matInput formControlName="work_location" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Munkatípus</mat-label>
+              <input matInput formControlName="type" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Próbaidő</mat-label>
+              <input matInput formControlName="testing_time" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Állapot</mat-label>
+              <mat-select formControlName="status">
+                <mat-option value="ACTIVE">Aktív</mat-option>
+                <mat-option value="INACTIVE">Inaktív</mat-option>
+                <mat-option value="CLOSED">Lezárt</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Oktatás</mat-label>
+              <input matInput formControlName="education" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Leírás</mat-label>
+              <textarea matInput formControlName="description" class="description-textarea"></textarea>
+            </mat-form-field>
+
+            <div class="form-actions">
+              <button mat-button color="primary" (click)="saveJob(job.id)">Mentés</button>
+              <button mat-button type="button" (click)="cancelEdit()">Mégse</button>
+            </div>
+          </form>
+        </ng-container>
+
+        <!-- View mode -->
+        <ng-template #viewMode>
+          <h3>{{ job.position }}</h3>
+          <p><strong>Munkavégzés helye:</strong> {{ job.work_location }}</p>
+          <p><strong>Munkatípus:</strong> {{ job.type }}</p>
+          <p><strong>Próbaidő:</strong> {{ job.testing_time }}</p>
+          <p><strong>Állapot:</strong> {{ job.status }}</p>
+          <p><strong>Feltöltve:</strong> {{ job.date.toDate() | date: 'mediumDate' }}</p>
+          <p><strong>Oktatás:</strong> {{ job.education }}</p>
+          <p><strong>Leírás:</strong> {{ job.description }}</p>
+          <button mat-icon-button (click)="editJob(job)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button (click)="deleteJob(job.id)" class="delete-button">🗑️ Törlés</button>
+        </ng-template>
       </div>
-      <button (click)="deleteJob(job.id)" class="delete-button">🗑️ Törlés</button>
     </li>
   </ul>
 </div>

@@ -40,6 +40,8 @@ export class JobManagementComponent implements OnInit {
   contact: Contact | null = null;
   jobForm!: FormGroup;
   showAddJobForm = false;
+  editJobForm!: FormGroup;
+  editedJobId: string | null = null;
 
   constructor(
     private jobService: JobService,
@@ -70,9 +72,9 @@ export class JobManagementComponent implements OnInit {
         return;
       }
 
-      this.jobs = await this.jobService.getByCompanyRef(this.contact.companyId);
+      await this.loadJobs();
     } catch (error) {
-      console.error('Hiba a job-amangement oldalt betöltése közben: ', error);
+      console.error('Hiba a job-management oldal betöltése közben: ', error);
     } finally {
       this.isLoading = false;
     }
@@ -121,6 +123,47 @@ export class JobManagementComponent implements OnInit {
     } catch (error) {
       console.error('Hiba az állás létrehozásakor: ', error);
     }
+  }
+
+  editJob(job: Job) {
+    this.editedJobId = job.id;
+    this.editJobForm = this.fb.group({
+      position: [job.position, Validators.required],
+      work_location: [job.work_location, Validators.required],
+      type: [job.type],
+      testing_time: [job.testing_time],
+      status: [job.status, Validators.required],
+      education: [job.education],
+      description: [job.description],
+    });
+  }
+
+  cancelEdit() {
+    this.editedJobId = null;
+  }
+
+  async saveJob(jobId: string) {
+    if (this.editJobForm.invalid) return;
+
+    const updatedJob = this.editJobForm.value;
+
+    const prevEditedId = this.editedJobId;
+    this.editedJobId = null;
+
+    try {
+      await this.jobService.updateJob(jobId, updatedJob);
+      await this.loadJobs();
+    } catch (error) {
+      console.error('Hiba mentés közben: ', error);
+      this.editedJobId = prevEditedId;
+      alert('Nem sikerült menteni a módosítást!');
+    }
+  }
+
+  private async loadJobs(): Promise<void> {
+    if (!this.contact?.companyId) return;
+
+    this.jobs = await this.jobService.getByCompanyRef(this.contact.companyId);
   }
 
   toggleAddJobForm(): void {
