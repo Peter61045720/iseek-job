@@ -17,4 +17,8 @@ export class CompanyService {
   getCompanyById(id: string): Promise<Company | null> {
     return this.baseService.getById(this.collectionName, id);
   }
+
+  update(id: string, data: Partial<Company>): Promise<void> {
+    return this.baseService.update(this.collectionName, id, data);
+  }
 }

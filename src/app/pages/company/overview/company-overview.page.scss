@@ -1,21 +1,93 @@
-.overview-container {
+.card-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 90%;
+  position: relative;
+}
+
+.company-form {
+  display: flex;
+  flex-direction: column;
+  width: 40vh;
+}
+
+.edit {
+  color: black;
+}
+
+.check {
+  color: green;
+}
+
+.close {
+  color: red;
+}
+
+button[mat-icon-button]:disabled .check {
+  color: lightgrey;
 }
 
 mat-card {
-  background-color: aliceblue;
+  background-color: ghostwhite;
 }
 
 mat-card-header {
   display: flex;
   justify-content: center;
-  padding-bottom: 10px;
+  align-items: center;
+  padding-bottom: 20px;
+  margin: 5px;
+}
+
+mat-card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 38vh;
 }
 
 mat-card-content {
   display: flex;
   justify-content: center;
+}
+
+mat-form-field {
+  margin: 5px;
+}
+
+.job-management-button-container {
+  position: absolute;
+  top: 1rem;
+  right: 4rem;
+  z-index: 1;
+}
+
+.job-management-button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    background-color: #1e40af;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    background-color: #1e3a8a;
+    transform: scale(0.98);
+  }
+
+  &:focus {
+    outline: 2px solid #93c5fd;
+    outline-offset: 2px;
+  }
 }
