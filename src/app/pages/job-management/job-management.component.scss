@@ -83,3 +83,21 @@ h2 {
     background-color: #c62828;
   }
 }
+
+.job-form-container {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+}
+
+.full-width {
+  width: 400px;
+}
+
+.description-textarea {
+  min-height: 100px;
+  resize: none;
+  overflow: auto;
+}

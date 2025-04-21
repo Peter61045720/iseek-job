@@ -3,7 +3,7 @@
 </div>
 
 <div *ngIf="!isLoading && (!contact || !contact.companyId)" class="warning-container">
-  <p class="warning-text">⚠️ Nincs hozzárendelve cég azonosító a profilodhoz. Az álláshirdetések nem elérhetők.</p>
+  <p class="warning-text">Nincs hozzárendelve cég azonosító a profilodhoz. Az álláshirdetések nem elérhetők.</p>
 </div>
 
 <div *ngIf="!isLoading && jobs.length === 0 && contact?.companyId">
@@ -12,12 +12,71 @@
 
 <div *ngIf="!isLoading && jobs.length > 0">
   <h2>Álláshirdetések</h2>
+
+  <div class="add-job-icon">
+    <button mat-icon-button (click)="toggleAddJobForm()">
+      <mat-icon>{{ showAddJobForm ? 'close' : 'add_circle' }}</mat-icon>
+    </button>
+  </div>
+
+  <!-- Job hozzáadása form -->
+  <div *ngIf="showAddJobForm" class="job-form-container">
+    <form [formGroup]="jobForm" (ngSubmit)="createJob()">
+      <div class="form-fields-grid">
+        <mat-form-field appearance="fill">
+          <mat-label>Pozíció</mat-label>
+          <input matInput formControlName="position" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Helyszín</mat-label>
+          <input matInput formControlName="work_location" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Munkatípus</mat-label>
+          <input matInput formControlName="type" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Próbaidő</mat-label>
+          <input matInput formControlName="testing_time" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Állapot</mat-label>
+          <mat-select formControlName="status">
+            <mat-option value="ACTIVE">Aktív</mat-option>
+            <mat-option value="INACTIVE">Inaktív</mat-option>
+            <mat-option value="CLOSED">Lezárt</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Oktatás</mat-label>
+          <input matInput formControlName="education" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Leírás</mat-label>
+          <textarea matInput formControlName="description" class="description-textarea"></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        <button mat-raised-button color="primary" type="submit" [disabled]="!jobForm.valid">Mentés</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Álláshirdetések listája -->
   <ul class="job-list">
     <li *ngFor="let job of jobs" class="job-item">
       <div class="job-details">
         <h3>{{ job.position }}</h3>
         <p><strong>Munkavégzés helye:</strong> {{ job.work_location }}</p>
         <p><strong>Munkatípus:</strong> {{ job.type }}</p>
+        <p><strong>Próbaidő:</strong> {{ job.testing_time }}</p>
         <p><strong>Állapot:</strong> {{ job.status }}</p>
         <p><strong>Feltöltve:</strong> {{ job.date.toDate() | date: 'mediumDate' }}</p>
         <p><strong>Oktatás:</strong> {{ job.education }}</p>
