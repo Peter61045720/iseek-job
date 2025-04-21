@@ -133,4 +133,17 @@ export class JobService {
       })
       .filter(d => d !== null) as (QueryFieldFilterConstraint | QueryStartAtConstraint)[];
   }
+
+  public async deleteJobAndApplications(jobId: string): Promise<void> {
+    const jobRef = this.baseService.getDocumentRef(this.collectionName, jobId);
+
+    // Töröljük az applications-t majd a job-ot
+    const applications = await this.applicationService.getApplicationsByJob(jobRef);
+
+    for (const application of applications) {
+      await this.applicationService.deleteApplicationById(application.id);
+    }
+
+    await this.baseService.delete(this.collectionName, jobId);
+  }
 }

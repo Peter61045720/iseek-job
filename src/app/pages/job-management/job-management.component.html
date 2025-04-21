@@ -1,0 +1,29 @@
+<div *ngIf="isLoading" class="loading-container">
+  <p>Betöltés...</p>
+</div>
+
+<div *ngIf="!isLoading && (!contact || !contact.companyId)" class="warning-container">
+  <p class="warning-text">⚠️ Nincs hozzárendelve cég azonosító a profilodhoz. Az álláshirdetések nem elérhetők.</p>
+</div>
+
+<div *ngIf="!isLoading && jobs.length === 0 && contact?.companyId">
+  <p>Nincsenek álláshirdetések a céghez.</p>
+</div>
+
+<div *ngIf="!isLoading && jobs.length > 0">
+  <h2>Álláshirdetések</h2>
+  <ul class="job-list">
+    <li *ngFor="let job of jobs" class="job-item">
+      <div class="job-details">
+        <h3>{{ job.position }}</h3>
+        <p><strong>Munkavégzés helye:</strong> {{ job.work_location }}</p>
+        <p><strong>Munkatípus:</strong> {{ job.type }}</p>
+        <p><strong>Állapot:</strong> {{ job.status }}</p>
+        <p><strong>Feltöltve:</strong> {{ job.date.toDate() | date: 'mediumDate' }}</p>
+        <p><strong>Oktatás:</strong> {{ job.education }}</p>
+        <p><strong>Leírás:</strong> {{ job.description }}</p>
+      </div>
+      <button (click)="deleteJob(job.id)" class="delete-button">🗑️ Törlés</button>
+    </li>
+  </ul>
+</div>

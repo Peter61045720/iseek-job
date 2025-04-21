@@ -52,6 +52,14 @@ export const routes: Routes = [
         canActivate: [roleGuard([UserRole.User])],
       },
       {
+        path: 'job-management',
+        loadComponent: () =>
+          import('./pages/job-management/job-management.component').then(
+            p => p.JobManagementComponent
+          ),
+        canActivate: [roleGuard([UserRole.Contact])],
+      },
+      {
         path: 'company/:id/overview',
         loadComponent: () =>
           import('./pages/company/overview/company-overview.page').then(p => p.CompanyOverviewPage),

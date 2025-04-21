@@ -29,7 +29,7 @@ export class ApplicationService {
     const jobRef = this.baseService.getDocumentRef('Jobs', job_id);
     const userRef = this.baseService.getDocumentRef('Users', user_id);
 
-    //Chekk if application Exists
+    //Check if application Exists
     const existing = await this.getApplicationByUserAndJob(userRef, jobRef);
     if (existing.length != 0) {
       throw 'Application Already Exists';
@@ -66,6 +66,12 @@ export class ApplicationService {
 
   getApplicationByUserAndJob(userRef: DocumentReference, jobRef: DocumentReference) {
     const filters = [where('user_ref', '==', userRef), where('job_ref', '==', jobRef)];
+    return this.baseService.getByFields(this.collectionName, filters);
+  }
+
+  // Get all applications by job only
+  getApplicationsByJob(jobRef: DocumentReference) {
+    const filters = [where('job_ref', '==', jobRef)];
     return this.baseService.getByFields(this.collectionName, filters);
   }
 
