@@ -1,3 +1,109 @@
-<div class="home-container">
-  <p>Home page works!</p>
-</div>
+<mat-grid-list [cols]="cols" rowHeight="200px">
+  <mat-grid-tile>
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>person_add</mat-icon>
+          <span> Account Registration </span>
+        </mat-card-title>
+        <mat-card-subtitle>Users, Contacts</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>
+          Users can create a personal account through a standard registration process. Contacts are required to register a company alongside their
+          personal account.
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>manage_accounts</mat-icon>
+          <span> Manage Account </span>
+        </mat-card-title>
+        <mat-card-subtitle>Users, Contacts</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Both Users and Contacts can edit some of their account details and also have the option to delete their account.</p>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>business_center</mat-icon>
+          <span> Viewing Job Offers </span>
+        </mat-card-title>
+        <mat-card-subtitle>Users</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Users can browse available job offers, use the search bar to find specific positions, and apply to jobs directly through the platform.</p>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>apartment</mat-icon>
+          <span> Viewing and Editing Company Details </span>
+        </mat-card-title>
+        <mat-card-subtitle>Contacts</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Contacts can view and edit the details of their associated company.</p>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>post_add</mat-icon>
+          <span> Posting Job Offers </span>
+        </mat-card-title>
+        <mat-card-subtitle>Contacts</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Contacts can post, edit, and delete job offers associated with their company.</p>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>checklist</mat-icon>
+          <span> Managing Job Applications </span>
+        </mat-card-title>
+        <mat-card-subtitle>Contacts</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Contacts can update the status of received applications, including accepting or rejecting candidates.</p>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>group_add</mat-icon>
+          <span> Registering a New Contact </span>
+        </mat-card-title>
+        <mat-card-subtitle>Contacts</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>An existing contact can register additional contacts under the same company.</p>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
