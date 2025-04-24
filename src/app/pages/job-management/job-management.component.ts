@@ -52,13 +52,31 @@ export class JobManagementComponent implements OnInit {
   ) {
     // Form inicializálás
     this.jobForm = this.fb.group({
-      position: ['', Validators.required],
-      work_location: ['', Validators.required],
-      type: ['', Validators.required],
-      testing_time: ['', Validators.required],
-      status: [JobStatus.ACTIVE, Validators.required],
-      education: ['', Validators.required],
-      description: ['', Validators.required],
+      position: [
+        // Szám nem lehet, csak karakter és  '- plusz karakter pl: Esztergályos
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '-][A-Za-zÀ-ÖØ-öø-ÿ]+)*\.?$/),
+        ],
+      ],
+      work_location: ['', Validators.required], // Még bármi lehet pl: 1051 Budapest, Erzsébet tér
+      type: [
+        // Ez is csak karakter pl: Alkalmazotti jogviszony
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '-]?[A-Za-zÀ-ÖØ-öø-ÿ]+)*$/),
+        ],
+      ],
+      testing_time: [
+        // szám + óra/nap/hét/hónap/év pl: 3 hónap
+        '',
+        [Validators.required, Validators.pattern(/^\d+\s*(hónap|nap|hét|év|óra)$/i)],
+      ],
+      status: [JobStatus.ACTIVE, Validators.required], //ez enumból jön: ACTIVE / INACTIVE / CLOSED
+      education: ['', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s.'-]+$/)]], // Karakter + szám lehet pl: Egyetem / Szakiskola
+      description: ['', Validators.required], // Bármi lehet
     });
   }
 
@@ -128,13 +146,31 @@ export class JobManagementComponent implements OnInit {
   editJob(job: Job) {
     this.editedJobId = job.id;
     this.editJobForm = this.fb.group({
-      position: [job.position, Validators.required],
+      position: [
+        job.position,
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '-][A-Za-zÀ-ÖØ-öø-ÿ]+)*\.?$/),
+        ],
+      ],
       work_location: [job.work_location, Validators.required],
-      type: [job.type],
-      testing_time: [job.testing_time],
+      type: [
+        job.type,
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '-]?[A-Za-zÀ-ÖØ-öø-ÿ]+)*$/),
+        ],
+      ],
+      testing_time: [
+        job.testing_time,
+        [Validators.required, Validators.pattern(/^\d+\s*(hónap|nap|hét|év|óra)$/i)],
+      ],
       status: [job.status, Validators.required],
-      education: [job.education],
-      description: [job.description],
+      education: [
+        job.education,
+        [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s.'-]+$/)],
+      ],
+      description: [job.description, Validators.required],
     });
   }
 
