@@ -16,7 +16,7 @@
 }
 
 .contact-card {
-  background-color: aliceblue;
+  background-color: var(--mat-sys-background);
 }
 
 .form-error {
@@ -38,4 +38,8 @@ mat-card-header {
 mat-card-content {
   display: flex;
   justify-content: center;
+}
+
+mat-card {
+  color: var(--mat-sys-on-background);
 }

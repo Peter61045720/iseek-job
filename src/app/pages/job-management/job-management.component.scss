@@ -2,13 +2,13 @@
   display: block;
   padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f9f9f9;
+  background-color: var(--mat-sys-background);
 }
 
 h2 {
   margin-bottom: 1.5rem;
   font-size: 1.8rem;
-  color: #333;
+  color: #494949;
 }
 
 .loading-container,
@@ -36,7 +36,8 @@ h2 {
 }
 
 .job-item {
-  background-color: #ffffff;
+  background-color: var(--mat-sys-background);
+  color: var(--mat-sys-on-background);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -52,16 +53,16 @@ h2 {
   h3 {
     font-size: 1.3rem;
     margin-bottom: 0.5rem;
-    color: #1a237e;
+    color: #3566c7;
   }
 
   p {
     margin: 0.4rem 0;
-    color: #444;
+    color: var(--mat-sys-on-background);
     font-size: 0.95rem;
 
     strong {
-      color: #222;
+      color: var(--mat-sys-on-background);
     }
   }
 }
@@ -85,7 +86,7 @@ h2 {
 }
 
 .job-form-container {
-  background: #fff;
+  background: var(--mat-sys-background);
   border: 1px solid #ccc;
   padding: 1rem;
   margin-bottom: 2rem;

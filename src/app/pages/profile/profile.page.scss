@@ -5,7 +5,7 @@
 }
 
 .edit {
-  color: black;
+  color: var(--mat-sys-on-background);
 }
 
 .check {
@@ -21,7 +21,7 @@ button[mat-icon-button]:disabled .check {
 }
 
 mat-card {
-  background-color: ghostwhite;
+  background-color: var(--mat-sys-background);
 }
 
 mat-card-header {

@@ -36,6 +36,7 @@ export class NavBarComponent implements OnInit {
   role: UserRole | null = null;
   contact: Contact | null = null;
   user: User | null = null;
+  isDarkMode = false;
 
   constructor(
     private router: Router,
@@ -115,5 +116,10 @@ export class NavBarComponent implements OnInit {
       this.router.navigateByUrl('/login');
       this.toast.success('Logged out successfully!');
     });
+  }
+
+  toggleDarkMode() {
+    this.isDarkMode = !this.isDarkMode;
+    document.body.classList.toggle('darkMode', this.isDarkMode);
   }
 }
