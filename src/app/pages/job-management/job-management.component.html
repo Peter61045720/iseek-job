@@ -10,14 +10,14 @@
   <p>This company has no job postings.</p>
 </div>
 
+<div class="add-job-icon">
+  <button mat-icon-button (click)="toggleAddJobForm()">
+    <mat-icon>{{ showAddJobForm ? 'close' : 'add_circle' }}</mat-icon>
+  </button>
+</div>
+
 <div *ngIf="!isLoading && jobs.length > 0">
   <h2>Job Postings</h2>
-
-  <div class="add-job-icon">
-    <button mat-icon-button (click)="toggleAddJobForm()">
-      <mat-icon>{{ showAddJobForm ? 'close' : 'add_circle' }}</mat-icon>
-    </button>
-  </div>
 
   <!-- Job hozzáadása form -->
   <div *ngIf="showAddJobForm" class="job-form-container">
