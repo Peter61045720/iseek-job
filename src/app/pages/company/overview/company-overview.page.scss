@@ -64,7 +64,7 @@ mat-form-field {
 }
 
 .job-management-button {
-  background-color: #2563eb;
+  background-color: darkcyan;
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -77,17 +77,17 @@ mat-form-field {
     transform 0.2s ease;
 
   &:hover {
-    background-color: #1e40af;
+    background-color: rgb(2, 103, 103);
     transform: translateY(-1px);
   }
 
   &:active {
-    background-color: #1e3a8a;
+    background-color: rgb(3, 74, 74);
     transform: scale(0.98);
   }
 
   &:focus {
-    outline: 2px solid #93c5fd;
+    outline: 2px solid #93f2fd;
     outline-offset: 2px;
   }
 }
