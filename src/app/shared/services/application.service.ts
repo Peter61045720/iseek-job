@@ -16,6 +16,7 @@ import { ApplicationStatus } from '../enums/application-status.enum';
 import { from, Observable } from 'rxjs';
 import { Job } from '../models/job.model';
 import { User } from '../models/user.model';
+import { Company } from '../models/company.model';
 
 @Injectable({
   providedIn: 'root',
@@ -63,7 +64,9 @@ export class ApplicationService {
   deleteApplicationById(id: string) {
     return this.baseService.delete(this.collectionName, id);
   }
-
+  deleteApplicationById$(id: string) {
+    return from(this.deleteApplicationById(id));
+  }
   getApplicationByUserAndJob(userRef: DocumentReference, jobRef: DocumentReference) {
     const filters = [where('user_ref', '==', userRef), where('job_ref', '==', jobRef)];
     return this.baseService.getByFields(this.collectionName, filters);
@@ -73,6 +76,25 @@ export class ApplicationService {
   getApplicationsByJob(jobRef: DocumentReference) {
     const filters = [where('job_ref', '==', jobRef)];
     return this.baseService.getByFields(this.collectionName, filters);
+  }
+
+  async getApplicationsByUser(user_id: string) {
+    const userRef = this.baseService.getDocumentRef('Users', user_id);
+    const filters = [where('user_ref', '==', userRef)];
+    return Promise.all(
+      (await this.baseService.getDocsByFields(this.collectionName, filters)).map(
+        async (snapshot: QueryDocumentSnapshot) => {
+          const application = snapshot.data() as Application;
+
+          application.company = (await getDoc(application.company_ref)).data() as Company;
+          application.job = (await getDoc(application.job_ref)).data() as Job;
+          return application;
+        }
+      )
+    );
+  }
+  getApplicationsByUser$(user_id: string) {
+    return from(this.getApplicationsByUser(user_id));
   }
 
   async withdrawByUserAndJob(user_id: string, job_id: string) {

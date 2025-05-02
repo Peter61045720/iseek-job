@@ -89,7 +89,9 @@ export class FirestoreBaseService<T extends { id: string }> {
       doc => ({ ...doc.data() })
     ) as T[];
   }
-
+  async getDocsByFields(collectionName: string, filters: QueryFieldFilterConstraint[]) {
+    return (await getDocs(query(collection(this.firestore, collectionName), ...filters))).docs;
+  }
   update(collectionName: string, id: string, data: Partial<T>): Promise<void> {
     const docRef = doc(this.firestore, `${collectionName}/${id}`);
     return updateDoc(docRef, data as DocumentData);

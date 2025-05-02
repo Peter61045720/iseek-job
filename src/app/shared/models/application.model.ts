@@ -19,4 +19,6 @@ export interface Application {
 
   status: ApplicationStatus;
   allSearchKeywords?: string[];
+
+  applied?: boolean;
 }

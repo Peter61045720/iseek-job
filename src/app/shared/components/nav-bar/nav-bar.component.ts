@@ -81,6 +81,13 @@ export class NavBarComponent implements OnInit {
         hidden: this.role !== UserRole.User,
       },
       {
+        label: 'My Applications',
+        route: 'my-applications',
+        icon: 'folder',
+        hidden: this.role !== UserRole.User,
+      },
+
+      {
         label: 'My Company',
         route: 'company/' + this.contact?.companyId + '/overview',
         icon: 'apartment',

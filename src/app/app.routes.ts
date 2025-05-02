@@ -80,6 +80,12 @@ export const routes: Routes = [
         canActivate: [roleGuard([UserRole.Contact])],
       },
       {
+        path: 'my-applications',
+        loadComponent: () =>
+          import('./pages/my-applications/my-applications.page').then(p => p.MyApplicationsPage),
+        canActivate: [roleGuard([UserRole.User])],
+      },
+      {
         path: 'profile',
         loadComponent: () => import('./pages/profile/profile.page').then(p => p.ProfilePage),
         canActivate: [roleGuard([UserRole.User])],

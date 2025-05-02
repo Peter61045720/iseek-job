@@ -1,0 +1,63 @@
+<div style="display: flex; justify-content: center; align-items: center; flex-direction: column">
+  <div style="display: flex; justify-content: center; align-items: center; flex-direction: row; gap: 10px">
+    <mat-form-field>
+      <mat-label>Status</mat-label>
+      <mat-select [(value)]="currApplicationStatus" (selectionChange)="applyFilter($event)">
+        @for (key of applicationKeys; track $index ) {
+        <mat-option value="{{key}}">{{statuses[key]}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="mat-elevation-z8" style="width: 60%">
+    <table mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="company_name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Company Name</th>
+        <td mat-cell *matCellDef="let application">{{application.company?.name}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="job">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Job</th>
+        <td mat-cell *matCellDef="let application">{{ application.job?.position }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Application Date</th>
+        <td mat-cell *matCellDef="let application">{{ application.date.toDate() | date:'longDate' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let application">{{statuses[application.status]}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+        <td mat-cell *matCellDef="let application; let i = index">
+          @if(application.applied === true){
+          <button
+            class="action-btn"
+            style="width: 100%"
+            mat-raised-button
+            color="secondary"
+            [disabled]="application.status.toString() !== '1' "
+            (click)="withdraw(application.id, i)"
+          >
+            Withdraw
+          </button>
+          } @else {
+          <button class="action-btn" style="width: 100%" mat-raised-button color="primary" (click)="apply(application.job_ref.id, i)">Apply</button>
+          }
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data to display</td>
+      </tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page"></mat-paginator>
+  </div>
+</div>

@@ -14,6 +14,6 @@ export const EducationDescriptions: Record<Education | string, string> = {
   [Education.VOCATIONAL_SCHOOL]: 'Vocational school / vocational training',
   [Education.HIGH_SCHOOL]: 'High School',
   [Education.HIGHER_VOCATIONAL_EDUCATION]: 'Higher education vocational training',
-  [Education.COLLEGE]: 'Főiskola',
-  [Education.UNIVERSITY]: 'Egyetem',
+  [Education.COLLEGE]: 'College',
+  [Education.UNIVERSITY]: 'University',
 };
