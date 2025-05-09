@@ -58,7 +58,7 @@ export class JobManagementComponent implements OnInit {
         [
           Validators.required,
           Validators.pattern(
-            /^[A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+([ '-][A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+)*\.?$/
+            /^[A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+([, '-][A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+)*\.?$/
           ),
         ],
       ],
@@ -161,7 +161,7 @@ export class JobManagementComponent implements OnInit {
         [
           Validators.required,
           Validators.pattern(
-            /^[A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+([ '-][A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+)*\.?$/
+            /^[A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+([, '-][A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+)*\.?$/
           ),
         ],
       ],
