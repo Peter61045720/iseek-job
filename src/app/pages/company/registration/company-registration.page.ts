@@ -50,7 +50,9 @@ export class CompanyRegistrationPage {
     {
       name: new FormControl('', [
         Validators.required,
-        Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '-][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/),
+        Validators.pattern(
+          /^[A-Za-zÀ-ÖØ-öø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+([ '-.][A-Za-zÀ-ÖØ-öø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+)*$/
+        ),
       ]),
       email: new FormControl('', [Validators.required, Validators.email]),
       phone: new FormControl('', [Validators.required, Validators.pattern(/^\+?\d+$/)]),
@@ -63,7 +65,9 @@ export class CompanyRegistrationPage {
   companyForm = new FormGroup({
     name: new FormControl('', [
       Validators.required,
-      Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '-][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/),
+      Validators.pattern(
+        /^[A-Za-zÀ-ÖØ-öø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+([ '.-]?[A-Za-zÀ-ÖØ-öø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+)*\.?$/
+      ),
     ]),
     email: new FormControl('', [Validators.required, Validators.email]),
     phone: new FormControl('', [Validators.required, Validators.pattern(/^\+?\d+$/)]),

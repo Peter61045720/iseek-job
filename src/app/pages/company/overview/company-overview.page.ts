@@ -63,7 +63,9 @@ export class CompanyOverviewPage implements OnInit {
               this.company.name,
               [
                 Validators.required,
-                Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '.-]?[A-Za-zÀ-ÖØ-öø-ÿ]+)*\.?$/),
+                Validators.pattern(
+                  /^[A-Za-zÀ-ÖØ-öø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+([ '.-]?[A-Za-zÀ-ÖØ-öø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+)*\.?$/
+                ),
               ],
             ],
             email: [this.company.email, [Validators.required, Validators.email]],
@@ -72,7 +74,9 @@ export class CompanyOverviewPage implements OnInit {
               this.company.location,
               [
                 Validators.required,
-                Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '-][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/),
+                Validators.pattern(
+                  /^[A-Za-zÀ-ÖØ-öø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+([ '-][A-Za-zÀ-ÖØ-öø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+)*$/
+                ),
               ],
             ],
             taxNumber: [this.company.taxNumber],

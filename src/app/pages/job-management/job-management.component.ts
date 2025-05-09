@@ -57,7 +57,9 @@ export class JobManagementComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '-][A-Za-zÀ-ÖØ-öø-ÿ]+)*\.?$/),
+          Validators.pattern(
+            /^[A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+([ '-][A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+)*\.?$/
+          ),
         ],
       ],
       work_location: ['', Validators.required], // Még bármi lehet pl: 1051 Budapest, Erzsébet tér
@@ -66,7 +68,9 @@ export class JobManagementComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '-]?[A-Za-zÀ-ÖØ-öø-ÿ]+)*$/),
+          Validators.pattern(
+            /^[A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+([ '-]?[A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+)*$/
+          ),
         ],
       ],
       testing_time: [
@@ -75,7 +79,13 @@ export class JobManagementComponent implements OnInit {
         [Validators.required, Validators.pattern(/^\d+\s*(hónap|nap|hét|év|óra)$/i)],
       ],
       status: [JobStatus.ACTIVE, Validators.required], //ez enumból jön: ACTIVE / INACTIVE / CLOSED
-      education: ['', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s.'-]+$/)]], // Karakter + szám lehet pl: Egyetem / Szakiskola
+      education: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű0-9\s.|/'-]+$/),
+        ],
+      ], // Karakter + szám lehet pl: Egyetem / Szakiskola
       description: ['', Validators.required], // Bármi lehet
     });
   }
@@ -150,7 +160,9 @@ export class JobManagementComponent implements OnInit {
         job.position,
         [
           Validators.required,
-          Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '-][A-Za-zÀ-ÖØ-öø-ÿ]+)*\.?$/),
+          Validators.pattern(
+            /^[A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+([ '-][A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+)*\.?$/
+          ),
         ],
       ],
       work_location: [job.work_location, Validators.required],
@@ -158,7 +170,9 @@ export class JobManagementComponent implements OnInit {
         job.type,
         [
           Validators.required,
-          Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ '-]?[A-Za-zÀ-ÖØ-öø-ÿ]+)*$/),
+          Validators.pattern(
+            /^[A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+([ '-]?[A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+)*$/
+          ),
         ],
       ],
       testing_time: [
@@ -168,7 +182,7 @@ export class JobManagementComponent implements OnInit {
       status: [job.status, Validators.required],
       education: [
         job.education,
-        [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s.'-]+$/)],
+        [Validators.required, Validators.pattern(/^[A-Za-zÀ-ŐØ-őø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű0-9\s.'-]+$/)],
       ],
       description: [job.description, Validators.required],
     });
