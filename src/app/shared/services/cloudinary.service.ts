@@ -12,6 +12,7 @@ export class CloudinaryService {
   private uploadPreset = 'iseek-job_default';
   private url = `https://api.cloudinary.com/v1_1/${this.cloudName}/upload`;
   public static DEFAULT_PROFILE_IMAGE_ID = 'default-avatar-icon';
+  public static DEFAULT_CONTACT_IMAGE_ID = 'default-contact-avatar-icon';
 
   constructor(private httpClient: HttpClient) {}
 

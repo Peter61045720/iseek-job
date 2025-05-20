@@ -20,6 +20,9 @@ import { DeleteAccountDialog } from '../../../shared/components/dialogs/delete-a
 import { MatDialog } from '@angular/material/dialog';
 import { Contact } from '../../../shared/models/contact.model';
 import { ContactService } from '../../../shared/services/contact.service';
+import { CloudinaryModule } from '@cloudinary/ng';
+import { CloudinaryImage } from '@cloudinary/url-gen';
+import { CloudinaryService } from '../../../shared/services/cloudinary.service';
 
 @Component({
   selector: 'app-contact-profile',
@@ -38,6 +41,7 @@ import { ContactService } from '../../../shared/services/contact.service';
     MatCardContent,
     MatCardActions,
     MatIcon,
+    CloudinaryModule,
   ],
   templateUrl: './contact-profile.page.html',
   styleUrl: './contact-profile.page.scss',
@@ -47,7 +51,8 @@ export class ContactProfilePage implements OnInit, OnDestroy {
 
   isEditing = false;
   contact: Contact | null = null;
-  subscription: Subscription | null = null;
+  subscriptions: Subscription[] = [];
+  profileImage!: CloudinaryImage;
 
   profileForm = new FormGroup({
     id: new FormControl(''),
@@ -64,6 +69,7 @@ export class ContactProfilePage implements OnInit, OnDestroy {
     private readonly dialog: MatDialog,
     private authService: AuthService,
     private contactService: ContactService,
+    private cloudinaryService: CloudinaryService,
     private toast: HotToastService,
     private router: Router
   ) {}
@@ -79,19 +85,26 @@ export class ContactProfilePage implements OnInit, OnDestroy {
     if (!uid) {
       this.router.navigateByUrl('/login');
     } else {
-      this.contactService.getContactById(uid).then(contact => {
-        if (contact) {
-          this.contact = contact;
-          this.patchValues();
-        }
-      });
+      this.getContactData(uid);
     }
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
+
+  getContactData(uid: string): void {
+    this.contactService.getContactById(uid).then(contact => {
+      if (contact) {
+        this.contact = contact;
+        this.patchValues();
+        this.profileImage = this.cloudinaryService.getImageById(
+          this.contact.profileImageId
+            ? this.contact.profileImageId
+            : CloudinaryService.DEFAULT_CONTACT_IMAGE_ID
+        );
+      }
+    });
   }
 
   patchValues(): void {
@@ -131,22 +144,53 @@ export class ContactProfilePage implements OnInit, OnDestroy {
     });
   }
 
+  openFileDialog(input: HTMLInputElement): void {
+    input.click();
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+
+      this.subscriptions.push(
+        this.cloudinaryService
+          .uploadImage(file)
+          .pipe(
+            this.toast.observe({
+              loading: 'Uploading image...',
+              success: 'Image uploaded successfully!',
+              error: 'Could not upload image. Please try again later',
+            })
+          )
+          .subscribe(response => {
+            this.contact!.profileImageId = response.public_id;
+            this.save();
+          })
+      );
+    }
+  }
+
   save(): void {
     this.contact!.name = this.profileForm.get('name')!.value!;
     this.contact!.phone = this.profileForm.get('phone')!.value!;
 
-    this.subscription = this.contactService
-      .updateContact$(this.contact!.id, this.contact!)
-      .pipe(
-        this.toast.observe({
-          loading: 'Updating contact...',
-          success: 'Contact updated successfully!',
-          error: 'Could not update contact. Please try again later.',
+    this.subscriptions.push(
+      this.contactService
+        .updateContact$(this.contact!.id, this.contact!)
+        .pipe(
+          this.toast.observe({
+            loading: 'Updating contact...',
+            success: 'Contact updated successfully!',
+            error: 'Could not update contact. Please try again later.',
+          })
+        )
+        .subscribe(() => {
+          this.toggleEdit();
+          this.getContactData(this.contact!.id);
         })
-      )
-      .subscribe(() => {
-        this.toggleEdit();
-      });
+    );
   }
 
   async delete(): Promise<void> {
@@ -163,6 +207,11 @@ export class ContactProfilePage implements OnInit, OnDestroy {
     } finally {
       loadingToast.close();
     }
+  }
+
+  deleteProfileImage(): void {
+    this.contact!.profileImageId = CloudinaryService.DEFAULT_CONTACT_IMAGE_ID;
+    this.save();
   }
 
   goBack(): void {
