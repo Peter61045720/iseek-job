@@ -13,6 +13,7 @@ export class CloudinaryService {
   private url = `https://api.cloudinary.com/v1_1/${this.cloudName}/upload`;
   public static DEFAULT_PROFILE_IMAGE_ID = 'default-avatar-icon';
   public static DEFAULT_CONTACT_IMAGE_ID = 'default-contact-avatar-icon';
+  public static DEFAULT_COMPANY_IMAGE_ID = 'default-company-avatar-icon';
 
   constructor(private httpClient: HttpClient) {}
 

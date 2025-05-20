@@ -5,5 +5,5 @@ export interface Company {
   phone: string;
   location: string;
   taxNumber: string;
-  logo?: string;
+  logoId?: string;
 }

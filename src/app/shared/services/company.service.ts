@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { FirestoreBaseService } from './firestore-base.service';
 import { Company } from './../models/company.model';
+import { from, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,11 @@ export class CompanyService {
     return this.baseService.getById(this.collectionName, id);
   }
 
-  update(id: string, data: Partial<Company>): Promise<void> {
-    return this.baseService.update(this.collectionName, id, data);
+  updateCompany(id: string, company: Partial<Company>): Promise<void> {
+    return this.baseService.update(this.collectionName, id, company);
+  }
+
+  updateCompany$(id: string, company: Partial<Company>): Observable<void> {
+    return from(this.updateCompany(id, company));
   }
 }

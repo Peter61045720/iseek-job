@@ -1,23 +1,19 @@
 <div class="card-container">
-  <div class="job-management-button-container">
-    <button (click)="navigate('/job-management')" class="job-management-button">Manage Job Listings</button>
-  </div>
-
   <mat-card *ngIf="company">
     <mat-card-header>
       <mat-card-title>
-        <span>My Company</span>
+        <span> My Company </span>
         <span>
           @if (!isEditing) {
           <button mat-icon-button (click)="toggleEdit()">
-            <mat-icon class="edit">edit</mat-icon>
+            <mat-icon class="edit"> edit </mat-icon>
           </button>
           } @else {
-          <button mat-icon-button [disabled]="!form.valid" (click)="save()">
-            <mat-icon class="check">check</mat-icon>
+          <button mat-icon-button [disabled]="!isFormValid" (click)="save()">
+            <mat-icon class="check"> check </mat-icon>
           </button>
           <button mat-icon-button (click)="toggleEdit()">
-            <mat-icon class="close">close</mat-icon>
+            <mat-icon class="close"> close </mat-icon>
           </button>
           }
         </span>
@@ -25,7 +21,21 @@
     </mat-card-header>
 
     <mat-card-content>
-      <form class="company-form" [formGroup]="form">
+      <div class="profile-image-container">
+        <advanced-image [cldImg]="logo" class="profile-image" />
+        @if (isEditing) {
+        <button mat-flat-button (click)="openFileDialog(fileInput)">
+          <mat-icon>add_photo_alternate</mat-icon>
+          <span> Upload image </span>
+        </button>
+        <input #fileInput type="file" [hidden]="true" (change)="onFileSelected($event)" />
+        <button mat-flat-button color="danger-button" (click)="deleteLogo()">
+          <mat-icon>delete_forever</mat-icon>
+          <span> Delete image </span>
+        </button>
+        }
+      </div>
+      <form class="company-form" [formGroup]="companyForm">
         <mat-form-field appearance="outline">
           <mat-label>Company ID</mat-label>
           <input matInput formControlName="id" [readonly]="true" />
@@ -34,21 +44,25 @@
         <mat-form-field appearance="outline">
           <mat-label>Name</mat-label>
           <input matInput formControlName="name" [readonly]="!isEditing" />
+          <mat-error *ngIf="!companyForm.get('name')?.valid && companyForm.get('name')?.touched">Please enter a valid name.</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
           <input matInput type="email" formControlName="email" [readonly]="!isEditing" />
+          <mat-error *ngIf="!companyForm.get('email')?.valid && companyForm.get('email')?.touched">Please enter a valid email.</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Phone</mat-label>
           <input matInput formControlName="phone" [readonly]="!isEditing" />
+          <mat-error *ngIf="!companyForm.get('phone')?.valid && companyForm.get('phone')?.touched">Please enter a valid phone number.</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Location</mat-label>
           <input matInput formControlName="location" [readonly]="!isEditing" />
+          <mat-error *ngIf="!companyForm.get('location')?.valid && companyForm.get('location')?.touched">Please enter a valid location.</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -57,5 +71,8 @@
         </mat-form-field>
       </form>
     </mat-card-content>
+    <mat-card-actions>
+      <button mat-flat-button (click)="navigate('/job-management')">Manage Job Listings</button>
+    </mat-card-actions>
   </mat-card>
 </div>

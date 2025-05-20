@@ -33,7 +33,7 @@
           ><mat-icon>location_city</mat-icon><a href="/company/{{job.company?.id}}/overview">{{job.company?.name}}</a></mat-card-subtitle
         >
         <mat-card-subtitle class="job-subtitle"><mat-icon>location_on</mat-icon> {{job.company?.location}}</mat-card-subtitle>
-        <img mat-card-sm-image matCardImage src="{{job.company?.logo}}" alt="logo" />
+        <img mat-card-sm-image matCardImage src="{{job.company?.logoId}}" alt="logo" />
       </mat-card-title-group>
     </mat-card-header>
     <mat-card-content class="job-content"> {{job.description.substring(0,150) + (job.description.length>150?"...":"")}} </mat-card-content>
