@@ -1,5 +1,4 @@
 import { AuthService } from './../../shared/services/auth.service';
-import { Application } from './../../shared/models/application.model';
 import { JobSearchDate, JobSearchDateDescriptions } from '../../shared/enums/job-search-date.enum';
 import { Education, EducationDescriptions } from '../../shared/enums/education.enum';
 import { MatCardModule } from '@angular/material/card';
@@ -12,12 +11,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, firstValueFrom, Subject, Subscription } from 'rxjs';
-import { QueryDocumentSnapshot, Timestamp } from '@angular/fire/firestore';
+import { QueryDocumentSnapshot } from '@angular/fire/firestore';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ApplicationService } from '../../shared/services/application.service';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { DatePipe } from '@angular/common';
+import { CloudinaryModule } from '@cloudinary/ng';
+import { CloudinaryImage } from '@cloudinary/url-gen/index';
+import { CloudinaryService } from '../../shared/services/cloudinary.service';
+import { Company } from '../../shared/models/company.model';
 
 @Component({
   selector: 'app-jobs',
@@ -31,6 +34,7 @@ import { DatePipe } from '@angular/common';
     MatIconModule,
     MatButtonModule,
     DatePipe,
+    CloudinaryModule,
   ],
   templateUrl: './jobs.page.html',
   styleUrl: './jobs.page.scss',
@@ -40,17 +44,10 @@ export class JobsPage implements OnInit, OnDestroy {
 
   private modelChanged: Subject<string> = new Subject<string>();
   private subscription!: Subscription;
+  private logoCache: Map<string, CloudinaryImage> = new Map<string, CloudinaryImage>();
   debounceTime = 500;
   docs: QueryDocumentSnapshot[] = [];
 
-  ngOnInit(): void {
-    this.subscription = this.modelChanged.pipe(debounceTime(this.debounceTime)).subscribe(() => {
-      this.getFilteredData(0);
-    });
-  }
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
   pageIndex: number;
   pageSize: number;
   length: number;
@@ -66,9 +63,10 @@ export class JobsPage implements OnInit, OnDestroy {
   search = '';
 
   constructor(
+    private authService: AuthService,
     private jobService: JobService,
     private applicationService: ApplicationService,
-    private authService: AuthService,
+    private cloudinaryService: CloudinaryService,
     private toast: HotToastService
   ) {
     this.pageIndex = 0;
@@ -81,6 +79,17 @@ export class JobsPage implements OnInit, OnDestroy {
     //jobService.countAll().then(count => (this.length = count));
     this.getFilteredData(0);
   }
+
+  ngOnInit(): void {
+    this.subscription = this.modelChanged.pipe(debounceTime(this.debounceTime)).subscribe(() => {
+      this.getFilteredData(0);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
   handlePageEvent(e: PageEvent) {
     this.length = e.length;
     this.pageSize = e.pageSize;
@@ -93,11 +102,13 @@ export class JobsPage implements OnInit, OnDestroy {
     this.pageIndex = 0;
     this.getFilteredData(0);
   }
+
   handleDateChange(value: number) {
     /**Todo servicebe date feltételek */
     this.pageIndex = 0;
     this.getFilteredData(0);
   }
+
   /**
    * Nincs már fulltext Search
    * Inkább cég nevekből select, ha már úgyse tudunk pozíció névre keresni...
@@ -106,6 +117,7 @@ export class JobsPage implements OnInit, OnDestroy {
     this.pageIndex = 0;
     this.modelChanged.next(this.search);
   }
+
   private getFilteredData(dir: number) {
     let doc: QueryDocumentSnapshot | null = this.docs[0] ?? null;
     if (dir == 1) doc = this.docs[this.docs.length - 1] ?? null; //előrefele lépünk startAfter()
@@ -128,6 +140,9 @@ export class JobsPage implements OnInit, OnDestroy {
 
     this.jobService.getAllFiltered(this.pageSize, this.pageIndex, filters, dir, doc).then(jobs => {
       this.jobs = jobs.map(d => d.job);
+      this.storeAllLogos(
+        this.jobs.map(job => job.company).filter(company => company !== undefined)
+      );
       this.docs = jobs.map(d => d.doc);
       this.prevPageFirstJob = tmp;
     });
@@ -173,5 +188,24 @@ export class JobsPage implements OnInit, OnDestroy {
         })
       )
     );
+  }
+
+  storeAllLogos(companies: Company[]): void {
+    companies.forEach(company => {
+      const logo = this.cloudinaryService.getImageById(
+        company.logoId ? company.logoId : CloudinaryService.DEFAULT_COMPANY_IMAGE_ID,
+        75,
+        75
+      );
+      this.logoCache.set(company.id, logo);
+    });
+  }
+
+  getCompanyLogo(companyId?: string): CloudinaryImage {
+    if (!companyId) {
+      return this.cloudinaryService.getImageById(CloudinaryService.DEFAULT_COMPANY_IMAGE_ID);
+    }
+
+    return this.logoCache.get(companyId)!;
   }
 }

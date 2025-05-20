@@ -66,9 +66,7 @@ export class CompanyOverviewPage implements OnInit, OnDestroy {
     phone: new FormControl('', [Validators.required, Validators.pattern(/^\+?\d{11}$/)]),
     location: new FormControl('', [
       Validators.required,
-      Validators.pattern(
-        /^[A-Za-zÀ-ÖØ-öø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+([ '-][A-Za-zÀ-ÖØ-öø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű]+)*$/
-      ),
+      Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿÁÉÍÓÖŐÚÜŰáéíóöőúüű0-9\s.,'-]+$/),
     ]),
     taxNumber: new FormControl(''),
   });

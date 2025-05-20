@@ -20,30 +20,30 @@
   <h2>Job Postings</h2>
 
   <!-- Job hozzáadása form -->
-  <div *ngIf="showAddJobForm" class="job-form-container">
+  <div *ngIf="showAddJobForm" class="card-container">
     <form [formGroup]="jobForm" (ngSubmit)="createJob()">
-      <div class="form-fields-grid">
-        <mat-form-field appearance="fill">
+      <div class="form-fields">
+        <mat-form-field appearance="outline">
           <mat-label>Position</mat-label>
           <input matInput formControlName="position" />
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
           <mat-label>Work Location</mat-label>
           <input matInput formControlName="work_location" />
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
           <mat-label>Job Type</mat-label>
           <input matInput formControlName="type" />
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
           <mat-label>Probation Period</mat-label>
           <input matInput formControlName="testing_time" />
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
           <mat-label>Status </mat-label>
           <mat-select formControlName="status">
             <mat-option value="ACTIVE">Active</mat-option>
@@ -52,12 +52,12 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
           <mat-label>Education</mat-label>
           <input matInput formControlName="education" />
         </mat-form-field>
 
-        <mat-form-field appearance="fill" class="full-width">
+        <mat-form-field appearance="outline" class="full-width">
           <mat-label>Description</mat-label>
           <textarea matInput formControlName="description" class="description-textarea"></textarea>
         </mat-form-field>
@@ -135,7 +135,10 @@
           <button mat-icon-button (click)="editJob(job)">
             <mat-icon>edit</mat-icon>
           </button>
-          <button (click)="deleteJob(job.id)" class="delete-button">🗑️ Delete</button>
+          <button mat-flat-button color="danger-button" class="delete-button" (click)="deleteJob(job.id)">
+            <mat-icon>delete_forever</mat-icon>
+            <span> Delete </span>
+          </button>
         </ng-template>
       </div>
     </li>

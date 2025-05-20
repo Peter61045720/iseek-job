@@ -17,14 +17,14 @@ export class CloudinaryService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getImageById(id?: string): CloudinaryImage {
+  getImageById(id?: string, width = 200, height = 200): CloudinaryImage {
     const cld = new Cloudinary({
       cloud: {
         cloudName: this.cloudName,
       },
     });
 
-    return cld.image(id).resize(fill().width(200).height(200));
+    return cld.image(id).resize(fill().width(width).height(height));
   }
 
   uploadImage(file: File): Observable<{ public_id: string }> {
