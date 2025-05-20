@@ -21,6 +21,9 @@ import { HotToastService } from '@ngxpert/hot-toast';
 import { Subscription } from 'rxjs';
 import { DeleteAccountDialog } from '../../shared/components/dialogs/delete-account/delete-account.dialog';
 import { MatDialog } from '@angular/material/dialog';
+import { CloudinaryService } from '../../shared/services/cloudinary.service';
+import { CloudinaryModule } from '@cloudinary/ng';
+import { CloudinaryImage } from '@cloudinary/url-gen';
 
 @Component({
   selector: 'app-profile',
@@ -39,6 +42,7 @@ import { MatDialog } from '@angular/material/dialog';
     MatCardContent,
     MatCardActions,
     MatIcon,
+    CloudinaryModule,
   ],
   templateUrl: './profile.page.html',
   styleUrl: './profile.page.scss',
@@ -48,7 +52,8 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   isEditing = false;
   user: User | null = null;
-  subscription: Subscription | null = null;
+  subscriptions: Subscription[] = [];
+  profileImage!: CloudinaryImage;
 
   profileForm = new FormGroup({
     id: new FormControl(''),
@@ -68,6 +73,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     private readonly dialog: MatDialog,
     private authService: AuthService,
     private userService: UserService,
+    private cloudinaryService: CloudinaryService,
     private toast: HotToastService,
     private router: Router
   ) {}
@@ -83,19 +89,26 @@ export class ProfilePage implements OnInit, OnDestroy {
     if (!uid) {
       this.router.navigateByUrl('/login');
     } else {
-      this.userService.getUserById(uid).then(user => {
-        if (user) {
-          this.user = user;
-          this.patchValues();
-        }
-      });
+      this.getUserData(uid);
     }
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
+
+  getUserData(uid: string): void {
+    this.userService.getUserById(uid).then(user => {
+      if (user) {
+        this.user = user;
+        this.patchValues();
+        this.profileImage = this.cloudinaryService.getImageById(
+          this.user.profileImageId
+            ? this.user.profileImageId
+            : CloudinaryService.DEFAULT_PROFILE_IMAGE_ID
+        );
+      }
+    });
   }
 
   patchValues(): void {
@@ -134,6 +147,34 @@ export class ProfilePage implements OnInit, OnDestroy {
     });
   }
 
+  openFileDialog(input: HTMLInputElement): void {
+    input.click();
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+
+      this.subscriptions.push(
+        this.cloudinaryService
+          .uploadImage(file)
+          .pipe(
+            this.toast.observe({
+              loading: 'Uploading image...',
+              success: 'Image uploaded successfully!',
+              error: 'Could not upload image. Please try again later',
+            })
+          )
+          .subscribe(response => {
+            this.user!.profileImageId = response.public_id;
+            this.save();
+          })
+      );
+    }
+  }
+
   save(): void {
     this.user!.username = this.profileForm.get('username')!.value!;
     this.user!.name = this.profileForm.get('name')!.value!;
@@ -142,18 +183,21 @@ export class ProfilePage implements OnInit, OnDestroy {
       this.profileForm.get('username')!.value!
     );
 
-    this.subscription = this.userService
-      .updateUser$(this.user!.id, this.user!)
-      .pipe(
-        this.toast.observe({
-          loading: 'Updating user...',
-          success: 'User updated successfully!',
-          error: 'Could not update user. Please try again later.',
+    this.subscriptions.push(
+      this.userService
+        .updateUser$(this.user!.id, this.user!)
+        .pipe(
+          this.toast.observe({
+            loading: 'Updating user...',
+            success: 'User updated successfully!',
+            error: 'Could not update user. Please try again later.',
+          })
+        )
+        .subscribe(() => {
+          this.toggleEdit();
+          this.getUserData(this.user!.id);
         })
-      )
-      .subscribe(() => {
-        this.toggleEdit();
-      });
+    );
   }
 
   async delete(): Promise<void> {
@@ -170,6 +214,11 @@ export class ProfilePage implements OnInit, OnDestroy {
     } finally {
       loadingToast.close();
     }
+  }
+
+  deleteProfileImage(): void {
+    this.user!.profileImageId = CloudinaryService.DEFAULT_PROFILE_IMAGE_ID;
+    this.save();
   }
 
   goBack(): void {

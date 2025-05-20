@@ -28,7 +28,6 @@ mat-card-header {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 20px;
   margin: 5px;
 }
 
@@ -41,7 +40,9 @@ mat-card-title {
 
 mat-card-content {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 mat-form-field {

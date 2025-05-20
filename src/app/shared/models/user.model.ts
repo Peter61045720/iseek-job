@@ -4,6 +4,7 @@ export interface User {
   name: string;
   email: string;
   residence: string;
+  profileImageId?: string;
   usernameSearchKeywords: string[];
   emailSearchKeywords: string[];
 }

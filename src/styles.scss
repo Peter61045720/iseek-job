@@ -11,11 +11,37 @@
   );
 }
 
+.centered-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
 .card-container {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+}
+
+.profile-image-container {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 90%;
+  gap: 5px;
+  margin: 20px 0px;
+}
+
+.profile-image-container button {
+  width: 100%;
+}
+
+.profile-image {
+  object-fit: cover;
+  border-radius: 50%;
+  overflow: hidden;
 }
 
 html,

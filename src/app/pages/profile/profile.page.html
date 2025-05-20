@@ -21,6 +21,20 @@
     </mat-card-header>
 
     <mat-card-content>
+      <div class="profile-image-container">
+        <advanced-image [cldImg]="profileImage" class="profile-image" />
+        @if (isEditing) {
+        <button mat-flat-button (click)="openFileDialog(fileInput)">
+          <mat-icon>add_photo_alternate</mat-icon>
+          <span> Upload image </span>
+        </button>
+        <input #fileInput type="file" [hidden]="true" (change)="onFileSelected($event)" />
+        <button mat-flat-button color="danger-button" (click)="deleteProfileImage()">
+          <mat-icon>delete_forever</mat-icon>
+          <span> Delete image </span>
+        </button>
+        }
+      </div>
       <form class="profile-form" [formGroup]="profileForm">
         <mat-form-field appearance="outline">
           <mat-label>id</mat-label>
